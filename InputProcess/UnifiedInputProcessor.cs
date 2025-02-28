@@ -3,25 +3,34 @@ using UnityEngine;
 public class UnifiedInputProcessor : MonoBehaviour
 {
     public Playable playable;
+    [SerializeField] private PauseMenuUI pauseMenuUI;
     private IInputConverter inputConverter;
-
+    private static UnifiedInputProcessor singleton;
     void Awake()
     {
+        if (singleton != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        singleton = this;
+        DontDestroyOnLoad(gameObject);
+
         inputConverter = new KeyboardInputConverter();
     }
 
     void Update()
     {
-        // ========== get Input through converter ==========
+        // ========== Get Input through converter ==========
         inputConverter.Update();
 
         // ========== Processing Unified Input ==========
         if (inputConverter.ConsumeTab())
         {
-            // toggle pauseMenu UI
+            pauseMenuUI.ToggleActiveOfPausePanel();
         }
 
-        if (inputConverter.ConsumeJump())
+        if (inputConverter.ConsumeSpace())
         {
             // playable
         }

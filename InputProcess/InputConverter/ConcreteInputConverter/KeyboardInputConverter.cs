@@ -12,7 +12,7 @@ public class KeyboardInputConverter : IInputConverter
         KeyboardHolder = new InputHolder<KeyCode>(new List<KeyCode> { KeyCode.Space, KeyCode.Tab });
     }
 
-    public bool ConsumeJump()
+    public bool ConsumeSpace()
     {
         return KeyboardHolder.ConsumeInput(KeyCode.Space);
     }

@@ -14,7 +14,7 @@ public class TouchInputConverter : IInputConverter
         touchHolder = new InputHolder<int>(new List<int> { 0, 4 });
     }
 
-    public bool ConsumeJump()
+    public bool ConsumeSpace()
     {
         return touchHolder.ConsumeInput(0);
     }

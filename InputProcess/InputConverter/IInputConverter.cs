@@ -1,6 +1,6 @@
 public interface IInputConverter
 {
-    public bool ConsumeJump();
+    public bool ConsumeSpace();
     public bool ConsumeTab();
     public void Update();
 }
