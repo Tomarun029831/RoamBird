@@ -1,4 +1,4 @@
-public interface Charactor
+public interface Charactor : Entity
 {
 
 }
