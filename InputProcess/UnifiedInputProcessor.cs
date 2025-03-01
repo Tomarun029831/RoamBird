@@ -6,17 +6,23 @@ public class UnifiedInputProcessor : MonoBehaviour
     [SerializeField] private PauseMenuUI pauseMenuUI;
     private IInputConverter inputConverter;
     private static UnifiedInputProcessor singleton;
+
     void Awake()
     {
-        if (singleton != null)
+        if (singleton == null)
         {
-            Destroy(gameObject);
-            return;
+            singleton = this;
+            inputConverter = new KeyboardInputConverter();
+            DontDestroyOnLoad(gameObject);
         }
-        singleton = this;
-        DontDestroyOnLoad(gameObject);
-
-        inputConverter = new KeyboardInputConverter();
+        else
+        {
+            this.pauseMenuUI = singleton.pauseMenuUI;
+            this.inputConverter = singleton.inputConverter;
+            Destroy(singleton.gameObject);
+            singleton = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     void Update()
@@ -32,7 +38,7 @@ public class UnifiedInputProcessor : MonoBehaviour
 
         if (inputConverter.ConsumeSpace())
         {
-            // playable
+            playable.Execute(Playable.Bind.Space);
         }
     }
 }

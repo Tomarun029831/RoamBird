@@ -4,5 +4,5 @@ using UnityEngine;
 public class PlayableBirdScriptableObject : ScriptableObject
 {
     [SerializeField] private Vector2 jumpVelocity;
-    public Vector2 JumpVelocity => JumpVelocity;
+    public Vector2 JumpVelocity => jumpVelocity;
 }

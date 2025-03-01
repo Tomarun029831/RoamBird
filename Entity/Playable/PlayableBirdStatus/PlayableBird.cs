@@ -1,18 +1,29 @@
 using UnityEngine;
 
-public class PlayableBird : MonoBehaviour, Playable
+public class PlayableBird : Playable
 {
-    [SerializeField]
-    private PlayableBirdScriptableObject PlayableBirdData;
-    private Rigidbody2D rg;
-    private SpriteRenderer spriteRenderer;
-    private Animator animator;
+    [SerializeField] private PlayableBirdScriptableObject PlayableBirdData;
+    [SerializeField] private Rigidbody2D rg;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Animator animator;
     private State state;
 
-    void Awake()
+    public override void Execute(Bind bind)
     {
-        rg = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
+        switch (bind)
+        {
+            case (Bind.Space):
+                Jump();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void Jump()
+    {
+        // rg.linearVelocity = Vector2.zero;
+        // rg.AddForce(new(200, 300));
+        rg.linearVelocity = PlayableBirdData.JumpVelocity;
     }
 }

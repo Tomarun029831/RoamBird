@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PauseMenuUI : MonoBehaviour
 {
-    [SerializeField] GameObject pauseMenuCanvas;
+    [SerializeField] Canvas pauseMenuCanvas;
     [SerializeField] GameObject pausePanel;
     private static PauseMenuUI singleton;
     void Awake()
@@ -14,15 +14,13 @@ public class PauseMenuUI : MonoBehaviour
         }
         singleton = this;
         DontDestroyOnLoad(gameObject);
-        DontDestroyOnLoad(pauseMenuCanvas);
     }
 
-
     // ========== REACTION of Keyboard ==========
-    public void ToggleActiveOfPauseMenuCanvas() => pauseMenuCanvas.SetActive(!pauseMenuCanvas.activeSelf);
+    public void ToggleActiveOfPauseMenuCanvas() => pauseMenuCanvas.enabled = !pauseMenuCanvas.enabled;
     public void ToggleActiveOfPausePanel()
     {
-        if (pauseMenuCanvas.activeSelf) pausePanel.SetActive(!pausePanel.activeSelf);
+        if (pauseMenuCanvas.enabled) pausePanel.SetActive(!pausePanel.activeSelf);
     }
 
     // ========== REACTION of GUI on display ==========
@@ -30,7 +28,7 @@ public class PauseMenuUI : MonoBehaviour
     public void OnMainMenuButtonPressed()
     {
         pausePanel.SetActive(false);
-        pauseMenuCanvas.SetActive(false);
+        pauseMenuCanvas.enabled = false;
         SceneChanger.LoadMainMenu();
     }
     public void OnCloseButtonPressed() => pausePanel.SetActive(false);
