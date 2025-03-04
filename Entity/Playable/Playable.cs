@@ -7,5 +7,7 @@ public abstract class Playable : MonoBehaviour
         Space
     }
 
+    public abstract void FlipX();
+
     public abstract void Execute(Bind bind);
 }

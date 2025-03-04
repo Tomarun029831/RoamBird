@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayableBird : Playable
 {
-    [SerializeField] private PlayableBirdScriptableObject PlayableBirdData;
+    [SerializeField] private PlayableBirdScriptableObject playableBirdData;
     [SerializeField] private Rigidbody2D rg;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Animator animator;
@@ -20,10 +20,23 @@ public class PlayableBird : Playable
         }
     }
 
+    public override void FlipX()
+    {
+        spriteRenderer.flipX = !spriteRenderer.flipX;
+    }
+
     private void Jump()
     {
-        // rg.linearVelocity = Vector2.zero;
-        // rg.AddForce(new(200, 300));
-        rg.linearVelocity = PlayableBirdData.JumpVelocity;
+        Vector2 velocity = new(Mathf.Abs(rg.linearVelocityX), rg.linearVelocityY);
+        Vector2 maxVelocity = playableBirdData.JumpVelocity;
+        int direction = spriteRenderer.flipX ? -1 : 1;
+        if (maxVelocity.x >= velocity.x)
+        {
+            rg.linearVelocityX = direction * playableBirdData.JumpVelocity.x;
+        }
+        if (maxVelocity.y >= velocity.y)
+        {
+            rg.linearVelocityY = playableBirdData.JumpVelocity.y;
+        }
     }
 }
