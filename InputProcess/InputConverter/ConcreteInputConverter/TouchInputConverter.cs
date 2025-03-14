@@ -28,17 +28,23 @@ public class TouchInputConverter : IInputConverter
     {
         if (IsPointerOverGameObject()) { return; }
 
-        if (Input.GetTouch(0).phase == TouchPhase.Began && Input.touchCount == 1)
+        if (Input.touchCount == 1)
         {
-            touchHolder.HoldInput(0);
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            {
+                touchHolder.HoldInput(0);
+            }
         }
 
-        if (Input.GetTouch(0).phase == TouchPhase.Began &&
-            Input.GetTouch(1).phase == TouchPhase.Began &&
-            Input.GetTouch(2).phase == TouchPhase.Began &&
-            Input.GetTouch(3).phase == TouchPhase.Began && Input.touchCount == 4)
+        if (Input.touchCount == 4)
         {
-            touchHolder.HoldInput(4);
+            if (Input.GetTouch(0).phase == TouchPhase.Began &&
+                Input.GetTouch(1).phase == TouchPhase.Began &&
+                Input.GetTouch(2).phase == TouchPhase.Began &&
+                Input.GetTouch(3).phase == TouchPhase.Began)
+            {
+                touchHolder.HoldInput(4);
+            }
         }
     }
 

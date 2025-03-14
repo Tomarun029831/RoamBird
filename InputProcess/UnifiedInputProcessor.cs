@@ -13,6 +13,7 @@ public class UnifiedInputProcessor : MonoBehaviour
         {
             singleton = this;
             inputConverter = new KeyboardInputConverter();
+            // inputConverter = new TouchInputConverter();
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -35,7 +36,10 @@ public class UnifiedInputProcessor : MonoBehaviour
         {
             pauseMenuUI.ToggleActiveOfPausePanel();
         }
+    }
 
+    void FixedUpdate()
+    {
         if (inputConverter.ConsumeSpace())
         {
             playable.Execute(Playable.Bind.Space);
