@@ -51,10 +51,6 @@ public class PlayableBirdFly : PlayableBirdState
                 playableBird.SetStateToIdle();
             }
         }
-
-        if (collision2D.gameObject.CompareTag("Goal"))
-        {
-        }
     }
 
     public void OnTriggerEnter2D(Collider2D collider2D, PlayableBird playableBird)
@@ -62,6 +58,10 @@ public class PlayableBirdFly : PlayableBirdState
         if (collider2D.CompareTag("Enemy"))
         {
             Dead(playableBird);
+        }
+        if (collider2D.CompareTag("Goal"))
+        {
+            SceneChanger.ChangeFarwardScene();
         }
     }
 

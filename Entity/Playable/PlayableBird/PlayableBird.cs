@@ -12,10 +12,12 @@ public class PlayableBird : Playable
     public Animator Animator => animator;
     public PlayableBirdState State { private set; get; }
     private Vector2 initPosition;
+    private bool initFlipX;
 
     void Awake()
     {
         initPosition = transform.position;
+        initFlipX = spriteRenderer.flipX;
         SetState(PlayableBirdIdle.getInstance());
     }
 
@@ -57,6 +59,7 @@ public class PlayableBird : Playable
     public override void Init()
     {
         transform.position = initPosition;
+        spriteRenderer.flipX = initFlipX;
         animator.SetBool("isDie", false);
         SetStateToIdle();
     }
