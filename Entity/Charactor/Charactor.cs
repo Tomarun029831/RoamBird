@@ -1,4 +1,6 @@
-public interface Charactor : Entity
+using UnityEngine;
+
+public abstract class Charactor : Entity
 {
 
 }

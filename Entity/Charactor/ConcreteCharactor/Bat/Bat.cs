@@ -1,6 +1,6 @@
 public class Bat : Charactor
 {
-    public void Init()
+    public override void Init()
     {
 
     }

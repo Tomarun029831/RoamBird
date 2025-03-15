@@ -11,9 +11,11 @@ public class PlayableBird : Playable
     [SerializeField] private Animator animator;
     public Animator Animator => animator;
     public PlayableBirdState State { private set; get; }
+    private Vector2 initPosition;
 
     void Awake()
     {
+        initPosition = transform.position;
         SetState(PlayableBirdIdle.getInstance());
     }
 
@@ -31,10 +33,32 @@ public class PlayableBird : Playable
 
     public override void FlipX() => spriteRenderer.flipX = !spriteRenderer.flipX;
 
-    public void SetState(PlayableBirdState State)
+    public void SetStateToIdle()
     {
-        this.State = State;
-        State.Animate(animator);
+        SetState(PlayableBirdIdle.getInstance());
+    }
+    public void SetStateToFly()
+    {
+        SetState(PlayableBirdFly.getInstance());
+    }
+    public void SetStateToDie()
+    {
+        SetState(PlayableBirdDie.getInstance());
+        Invoke(nameof(CallSceneInitilaze), 2f);
+    }
+    private void SetState(PlayableBirdState state)
+    {
+        this.State = state;
+        this.State.Animate(Animator);
+    }
+
+    private void CallSceneInitilaze() => SceneInitializer.InitializeScene();
+
+    public override void Init()
+    {
+        transform.position = initPosition;
+        animator.SetBool("isDie", false);
+        SetStateToIdle();
     }
 
     void OnCollisionEnter2D(Collision2D collision2D) => State.OnCollisionEnter2D(collision2D, this);

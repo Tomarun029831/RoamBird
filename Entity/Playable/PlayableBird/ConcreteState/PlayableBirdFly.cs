@@ -47,7 +47,9 @@ public class PlayableBirdFly : PlayableBirdState
             // Debug.DrawRay(origin, 0.4f * Vector2.down, Color.red, 1);
             // Debug.Log(raycastHit2D.collider.name);
             if (raycastHit2D.collider != null)
-                playableBird.SetState(PlayableBirdIdle.getInstance());
+            {
+                playableBird.SetStateToIdle();
+            }
         }
 
         if (collision2D.gameObject.CompareTag("Goal"))
@@ -66,6 +68,6 @@ public class PlayableBirdFly : PlayableBirdState
     private void Dead(PlayableBird playableBird)
     {
         playableBird.Rg.linearVelocity = Vector2.zero;
-        playableBird.SetState(PlayableBirdDie.getInstance());
+        playableBird.SetStateToDie();
     }
 }

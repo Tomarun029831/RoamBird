@@ -25,7 +25,7 @@ public class PlayableBirdIdle : PlayableBirdState
         {
             playableBird.Rg.linearVelocityY = maxVelocity.y;
         }
-        playableBird.SetState(PlayableBirdFly.getInstance());
+        playableBird.SetStateToFly();
     }
 
     public void Animate(Animator animator)
@@ -56,6 +56,6 @@ public class PlayableBirdIdle : PlayableBirdState
     private void Dead(PlayableBird playableBird)
     {
         playableBird.Rg.linearVelocity = Vector2.zero;
-        playableBird.SetState(PlayableBirdDie.getInstance());
+        playableBird.SetStateToDie();
     }
 }

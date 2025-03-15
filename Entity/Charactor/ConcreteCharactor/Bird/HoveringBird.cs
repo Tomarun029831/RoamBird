@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HoveringBird : MonoBehaviour, Charactor
+public class HoveringBird : Charactor
 {
     [SerializeField] private float Amplitude;
     [SerializeField] private float speed;
@@ -24,7 +24,7 @@ public class HoveringBird : MonoBehaviour, Charactor
     }
 
 
-    public void Init()
+    public override void Init()
     {
         transform.position = initPosition;
     }

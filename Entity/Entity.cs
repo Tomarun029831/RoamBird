@@ -1,4 +1,6 @@
-public interface Entity
+using UnityEngine;
+
+public abstract class Entity : MonoBehaviour
 {
-    public void Init();
+    public abstract void Init();
 }
