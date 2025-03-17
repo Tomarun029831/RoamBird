@@ -16,4 +16,9 @@ public static class SceneScanner
     {
         return GameObject.FindObjectsByType<Charactor>(FindObjectsSortMode.None);
     }
+
+    public static CameraHandler ScanCameraHandler()
+    {
+        return GameObject.FindFirstObjectByType<CameraHandler>();
+    }
 }
