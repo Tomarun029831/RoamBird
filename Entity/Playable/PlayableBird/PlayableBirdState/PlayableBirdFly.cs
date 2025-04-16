@@ -27,7 +27,6 @@ public class PlayableBirdFly : PlayableBirdState
         }
     }
 
-
     public void Animate(Animator animator)
     {
         animator.SetBool("isFly", true);

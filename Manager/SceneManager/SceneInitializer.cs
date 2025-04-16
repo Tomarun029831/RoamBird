@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public static class SceneInitializer
 {
     public static void InitializeScene()

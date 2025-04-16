@@ -23,12 +23,10 @@ public class HoveringBird : Charactor
         rg.MovePosition(new(initPosition.x, yPos));
     }
 
-
     public override void Init()
     {
         transform.position = initPosition;
     }
-
 
 #if UNITY_EDITOR
     void OnDrawGizmos()

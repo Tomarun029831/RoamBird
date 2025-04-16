@@ -11,12 +11,13 @@ public class PlayableBird : Playable
     [SerializeField] private Animator animator;
     public Animator Animator => animator;
     public PlayableBirdState State { private set; get; }
-    private Vector2 initPosition;
+    private Vector2 initPosition, initVelocity;
     private bool initFlipX;
 
     void Awake()
     {
         initPosition = transform.position;
+        initVelocity = rg.linearVelocity;
         initFlipX = spriteRenderer.flipX;
         SetState(PlayableBirdIdle.getInstance());
     }
@@ -39,15 +40,19 @@ public class PlayableBird : Playable
     {
         SetState(PlayableBirdIdle.getInstance());
     }
+
     public void SetStateToFly()
     {
         SetState(PlayableBirdFly.getInstance());
     }
+
     public void SetStateToDie()
     {
         SetState(PlayableBirdDie.getInstance());
+        Rg.linearVelocity = Vector2.zero;
         Invoke(nameof(CallSceneInitilaze), 2f);
     }
+
     private void SetState(PlayableBirdState state)
     {
         this.State = state;
@@ -59,6 +64,7 @@ public class PlayableBird : Playable
     public override void Init()
     {
         transform.position = initPosition;
+        rg.linearVelocity = initVelocity;
         spriteRenderer.flipX = initFlipX;
         animator.SetBool("isDie", false);
         SetStateToIdle();

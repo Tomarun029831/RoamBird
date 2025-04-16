@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public abstract class Playable : Entity
 {
     public enum Bind
