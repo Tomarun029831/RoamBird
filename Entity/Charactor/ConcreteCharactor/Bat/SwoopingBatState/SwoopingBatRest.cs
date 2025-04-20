@@ -11,16 +11,13 @@ public class SwoopingBatRest : SwoopingBatState
 
     public static SwoopingBatState getInstance() => SingletonHolder.instance;
 
-    public void Update(SwoopingBat swoopingBat)
+    public void FixedUpdate(SwoopingBat swoopingBat)
     {
         RaycastHit2D raycastHit2D = Physics2D.Raycast(swoopingBat.transform.position, Vector2.down, 6f, LayerMask.GetMask("VisiblePlayer"));
-        if (raycastHit2D.collider == null)
-        {
-            return;
-        }
-        swoopingBat.State.TakeNextAction(swoopingBat);
-        // Debug.DrawRay(swoopingBat.transform.position, 6f * Vector2.down, Color.red, 1);
-        // Debug.Log(raycastHit2D.collider.name);
+        Debug.DrawRay(swoopingBat.transform.position, Vector2.down, Color.red, 1f);
+        if (raycastHit2D.collider == null) { return; }
+
+        swoopingBat.state.TakeNextAction(swoopingBat);
     }
 
     public void TakeNextAction(SwoopingBat swoopingBat)

@@ -8,9 +8,11 @@ public class SwoopingBat : Charactor
 
     [SerializeField] private Rigidbody2D rg;
 
+    [SerializeField] private Collider2D batCollider2D;
+
     [System.NonSerialized] public float internalTimer;
 
-    public SwoopingBatState State { get; private set; }
+    public SwoopingBatState state { get; private set; }
 
     private Vector3 initPosition;
 
@@ -20,20 +22,11 @@ public class SwoopingBat : Charactor
         Init();
     }
 
-    void Update()
-    {
-        State.Update(this);
-    }
+    void FixedUpdate() => state.FixedUpdate(this);
 
-    public void FlipToRight()
-    {
-        spriteRenderer.flipX = true;
-    }
+    public void FlipToRight() => spriteRenderer.flipX = true;
 
-    public void FlipToLeft()
-    {
-        spriteRenderer.flipX = false;
-    }
+    public void FlipToLeft() => spriteRenderer.flipX = false;
 
     public void MoveX(float vectorX)
     {
@@ -45,8 +38,16 @@ public class SwoopingBat : Charactor
         rg.MovePosition(new Vector2(transform.position.x, transform.position.y + vectorY));
     }
 
+    public void Hide()
+    {
+        spriteRenderer.enabled = false;
+        batCollider2D.enabled = false;
+    }
+
     public override void Init()
     {
+        spriteRenderer.enabled = true;
+        batCollider2D.enabled = true;
         transform.position = initPosition;
         internalTimer = 0;
         SetStateToRest();
@@ -79,7 +80,7 @@ public class SwoopingBat : Charactor
 
     private void SetState(SwoopingBatState state)
     {
-        this.State = state;
-        this.State.Animate(animator);
+        this.state = state;
+        this.state.Animate(animator);
     }
 }

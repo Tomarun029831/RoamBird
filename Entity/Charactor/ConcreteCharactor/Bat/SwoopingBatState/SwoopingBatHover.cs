@@ -11,7 +11,7 @@ public class SwoopingBatHover : SwoopingBatState
 
     public static SwoopingBatState getInstance() => SingletonHolder.instance;
 
-    public void Update(SwoopingBat swoopingBat)
+    public void FixedUpdate(SwoopingBat swoopingBat)
     {
         swoopingBat.internalTimer += Time.deltaTime;
 

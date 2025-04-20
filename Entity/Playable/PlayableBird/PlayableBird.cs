@@ -10,7 +10,7 @@ public class PlayableBird : Playable
     public SpriteRenderer SpriteRenderer => spriteRenderer;
     [SerializeField] private Animator animator;
     public Animator Animator => animator;
-    public PlayableBirdState State { private set; get; }
+    public PlayableBirdState state { private set; get; }
     private Vector2 initPosition, initVelocity;
     private bool initFlipX;
 
@@ -22,12 +22,16 @@ public class PlayableBird : Playable
         SetState(PlayableBirdIdle.getInstance());
     }
 
+    void OnCollisionEnter2D(Collision2D collision2D) => state.OnCollisionEnter2D(collision2D, this);
+
+    void OnTriggerEnter2D(Collider2D collider2D) => state.OnTriggerEnter2D(collider2D, this);
+
     public override void Execute(Bind bind)
     {
         switch (bind)
         {
             case (Bind.Space):
-                State.Jump(this);
+                state.Jump(this);
                 break;
             default:
                 break;
@@ -55,8 +59,8 @@ public class PlayableBird : Playable
 
     private void SetState(PlayableBirdState state)
     {
-        this.State = state;
-        this.State.Animate(Animator);
+        this.state = state;
+        this.state.Animate(Animator);
     }
 
     private void CallSceneInitilaze() => SceneInitializer.InitializeScene();
@@ -69,8 +73,4 @@ public class PlayableBird : Playable
         animator.SetBool("isDie", false);
         SetStateToIdle();
     }
-
-    void OnCollisionEnter2D(Collision2D collision2D) => State.OnCollisionEnter2D(collision2D, this);
-
-    void OnTriggerEnter2D(Collider2D collider2D) => State.OnTriggerEnter2D(collider2D, this);
 }

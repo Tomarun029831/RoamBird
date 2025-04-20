@@ -11,19 +11,19 @@ public class SwoopingBatFlyAway : SwoopingBatState
 
     public static SwoopingBatState getInstance() => SingletonHolder.instance;
 
-    public void Update(SwoopingBat swoopingBat)
+    public void FixedUpdate(SwoopingBat swoopingBat)
     {
         swoopingBat.internalTimer += Time.deltaTime;
         swoopingBat.MoveY(0.2f);
 
         if (swoopingBat.internalTimer < 1.6) { return; }
 
-        GameObject.Destroy(swoopingBat.gameObject);
+        TakeNextAction(swoopingBat);
     }
 
     public void TakeNextAction(SwoopingBat swoopingBat)
     {
-        return;
+        swoopingBat.Hide();
     }
 
     public void Animate(Animator animator)
