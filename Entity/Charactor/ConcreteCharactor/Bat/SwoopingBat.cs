@@ -28,9 +28,18 @@ public class SwoopingBat : Charactor
 
     public void FlipToLeft() => spriteRenderer.flipX = false;
 
+    public bool GetRestDirection(){
+        return spriteRenderer.flipX;
+    }
+
+    public void Turn(){
+        spriteRenderer.flipX = !spriteRenderer.flipX;
+    }
+
     public void MoveX(float vectorX)
     {
-        rg.MovePosition(new Vector2(transform.position.x + vectorX, transform.position.y));
+        if(vectorX <= 0){return;}
+        rg.MovePosition(new Vector2(transform.position.x + (spriteRenderer.flipX ? vectorX : -vectorX), transform.position.y));
     }
 
     public void MoveY(float vectorY)

@@ -15,14 +15,14 @@ public class SwoopingBatHover : SwoopingBatState
     {
         swoopingBat.internalTimer += Time.deltaTime;
 
-        if (swoopingBat.internalTimer < 1.5)
-        {
-            swoopingBat.MoveX(-0.2f);
-        }
-        else
-        {
-            swoopingBat.MoveX(0.2f);
-        }
+        Vector2 rayDirection = swoopingBat.GetRestDirection() ? Vector2.right : Vector2.left;
+        Vector2 raycastOrigin = new Vector2(swoopingBat.transform.position.x, swoopingBat.transform.position.y) + (rayDirection * 0.2f);
+        RaycastHit2D raycastHit2D = Physics2D.Raycast(raycastOrigin, rayDirection, 0.7f, LayerMask.GetMask("Ground"));
+        Debug.DrawRay(swoopingBat.transform.position, rayDirection, Color.red, 0);
+
+        if (raycastHit2D.collider != null) { swoopingBat.Turn(); }
+
+        swoopingBat.MoveX(0.2f);
 
         if (swoopingBat.internalTimer < 3) { return; }
 
