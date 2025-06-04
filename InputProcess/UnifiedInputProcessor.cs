@@ -4,7 +4,7 @@ public class UnifiedInputProcessor : MonoBehaviour
 {
     public Playable playable;
     [SerializeField] private PauseMenuUI pauseMenuUI;
-    private IInputConverter inputConverter;
+    private IInputConverter[] inputConverter;
     private static UnifiedInputProcessor singleton;
 
     void Awake()
@@ -12,8 +12,7 @@ public class UnifiedInputProcessor : MonoBehaviour
         if (singleton == null)
         {
             singleton = this;
-            inputConverter = new KeyboardInputConverter();
-            // inputConverter = new TouchInputConverter();
+            inputConverter = new IInputConverter[] {new KeyboardInputConverter(), new TouchInputConverter()};
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -29,19 +28,21 @@ public class UnifiedInputProcessor : MonoBehaviour
     void Update()
     {
         // ========== Get Input through converter ==========
-        inputConverter.Update();
+        foreach(IInputConverter converter in inputConverter)
+        {
+            converter.Update();
 
         // ========== Processing Unified Input ==========
-        if (inputConverter.ConsumeTab())
-        {
+            if (!converter.ConsumeTab()){continue;}
             pauseMenuUI.ToggleActiveOfPausePanel();
         }
     }
 
     void FixedUpdate()
     {
-        if (inputConverter.ConsumeSpace())
+        foreach(IInputConverter converter in inputConverter)
         {
+            if(!converter.ConsumeSpace()){continue;}
             playable.Execute(Playable.Bind.Space);
         }
     }
