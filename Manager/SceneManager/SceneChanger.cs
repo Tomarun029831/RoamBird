@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public static class SceneChanger
@@ -8,6 +9,12 @@ public static class SceneChanger
         if (0 < targetIndex && targetIndex < SceneManager.sceneCountInBuildSettings)
         {
             SceneManager.LoadScene(targetIndex);
+            return;
+        }
+        if(targetIndex >= SceneManager.sceneCountInBuildSettings)
+        {
+            LoadSceneAt(1);
+            return;
         }
     }
 
