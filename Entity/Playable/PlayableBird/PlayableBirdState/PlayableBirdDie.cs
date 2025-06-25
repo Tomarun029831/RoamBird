@@ -20,6 +20,5 @@ public class PlayableBirdDie : PlayableBirdState
     }
 
     public void OnCollisionEnter2D(Collision2D collision2D, PlayableBird playableBird) { }
-
     public void OnTriggerEnter2D(Collider2D collider2D, PlayableBird playableBird) { }
 }

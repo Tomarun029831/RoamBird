@@ -3,18 +3,18 @@ using UnityEngine.SceneManagement;
 
 public static class SceneChanger
 {
+    private static TrackInfoUIController trackInfoUIController = GameObject.FindFirstObjectByType<TrackInfoUIController>();
+
     public static void ChangeFarwardScene()
     {
         int targetIndex = SceneManager.GetActiveScene().buildIndex + 1;
         if (0 < targetIndex && targetIndex < SceneManager.sceneCountInBuildSettings)
         {
-            SceneManager.LoadScene(targetIndex);
-            return;
+            LoadSceneAt((uint)targetIndex);
         }
-        if(targetIndex >= SceneManager.sceneCountInBuildSettings)
+        else if (targetIndex >= SceneManager.sceneCountInBuildSettings)
         {
             LoadSceneAt(1);
-            return;
         }
     }
 
@@ -23,20 +23,19 @@ public static class SceneChanger
         int targetIndex = SceneManager.GetActiveScene().buildIndex - 1;
         if (0 < targetIndex && targetIndex < SceneManager.sceneCountInBuildSettings)
         {
-            SceneManager.LoadScene(targetIndex);
+            LoadSceneAt((uint)targetIndex);
         }
     }
 
-    public static void LoadSceneAt(int _index)
+    public static void LoadSceneAt(uint index)
     {
-        if (0 < _index && _index < SceneManager.sceneCountInBuildSettings)
+        if (index < SceneManager.sceneCountInBuildSettings)
         {
-            SceneManager.LoadScene(_index);
+            SceneManager.LoadScene((int)index);
+            StageProgressionTracker.Ready(index);
+            trackInfoUIController.UpdateTrackInfo(StageProgressionTracker.GetCurrentStageData());
         }
     }
 
-    public static void LoadMainMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
-    }
+    public static void LoadMainMenu() => LoadSceneAt(0);
 }

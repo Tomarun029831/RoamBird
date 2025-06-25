@@ -55,6 +55,7 @@ public class PlayableBird : Playable
         SetState(PlayableBirdDie.getInstance());
         Rg.linearVelocity = Vector2.zero;
         Invoke(nameof(CallSceneInitilaze), 2f);
+        StageProgressionTracker.StopTrack(false);
     }
 
     private void SetState(PlayableBirdState state)

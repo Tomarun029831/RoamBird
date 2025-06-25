@@ -49,6 +49,7 @@ public class PlayableBirdIdle : PlayableBirdState
         }
         if (collider2D.CompareTag("Goal"))
         {
+            StageProgressionTracker.StopTrack(true);
             SceneChanger.ChangeFarwardScene();
         }
     }

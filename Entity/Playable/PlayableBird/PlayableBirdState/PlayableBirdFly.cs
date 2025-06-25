@@ -43,12 +43,8 @@ public class PlayableBirdFly : PlayableBirdState
         {
             Vector3 origin = playableBird.transform.position + 0.3f * Vector3.down;
             RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, Vector2.down, 0.4f, LayerMask.GetMask("Ground"));
-            // Debug.DrawRay(origin, 0.4f * Vector2.down, Color.red, 1);
-            // Debug.Log(raycastHit2D.collider.name);
-            if (raycastHit2D.collider != null)
-            {
-                playableBird.SetStateToIdle();
-            }
+            if (raycastHit2D.collider == null) { return; }
+            playableBird.SetStateToIdle();
         }
     }
 
@@ -60,6 +56,7 @@ public class PlayableBirdFly : PlayableBirdState
         }
         if (collider2D.CompareTag("Goal"))
         {
+            StageProgressionTracker.StopTrack(true);
             SceneChanger.ChangeFarwardScene();
         }
     }
