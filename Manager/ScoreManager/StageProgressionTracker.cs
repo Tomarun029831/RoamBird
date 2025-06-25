@@ -63,6 +63,8 @@ public static class StageProgressionTracker
         state = State.InStop;
     }
 
+    public static Dictionary<uint, StageData> extractStageDatas() => stages;
+
     public static StageData GetCurrentStageData()
     {
         uint targetIndex = currentStageBuildIndex > 0 ? currentStageBuildIndex : 1;

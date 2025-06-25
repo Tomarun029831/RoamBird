@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Threading.Tasks;
 
 public class LoginFormUIController : MonoBehaviour
 {
@@ -10,27 +11,22 @@ public class LoginFormUIController : MonoBehaviour
     public void Active()
     {
         loginForm.SetActive(true);
-        username.text = "";
-        password.text = "";
+        // username.text = "";
+        // password.text = "";
     }
 
-    public string getUsername()
-    {
-        return username.text;
-    }
+    public string getUsername() => username.text;
 
-    public string getPassword()
-    {
-        return password.text;
-    }
+    public string getPassword() => password.text;
 
-    public void OnLoginButtonPressed()
+    public async Task OnLoginButtonPressed()
     {
         string username = this.getUsername();
         string password = this.getPassword();
         if (username == "" || password == "") { return; }
 
-        // HttpsConnector.doLogin(plainUsername:username, plainPassword:password);
+        string token = await HttpsConnector.doLogin(plainUsername: username, plainPassword: password);
+        HttpsConnector.pullTrackerData(token);
     }
 
     public void OnCreateAccountButtonPressed()
@@ -39,7 +35,7 @@ public class LoginFormUIController : MonoBehaviour
         string password = this.getPassword();
         if (username == "" || password == "") { return; }
 
-        // HttpsConnector.createAcconut(plainUsername:username, plainPassword:password);
+        HttpsConnector.createAcconut(plainUsername: username, plainPassword: password);
     }
 
     public void OnCloseButtonPressed()

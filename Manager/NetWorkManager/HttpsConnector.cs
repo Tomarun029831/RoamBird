@@ -1,12 +1,37 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
-using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 public static class HttpsConnector
 {
-    private const string TomaTechAPIURL = "";
+    private const string TOMATECHAPIURL = ENV.TOMATECHAPI;
+    private static string token = "";
+    [System.Serializable]
+    private class AccountData
+    {
+        public AccountData(string username, string password)
+        {
+            this.username = username;
+            this.password = password;
+        }
+        public string username;
+        public string password;
+    }
+    //
+    // [System.Serializable]
+    // private class TokenData
+    // {
+    //     public TokenData(string token, Dictionary<uint, StageData> trackingDatas)
+    //     {
+    //         this.token = token;
+    //         this.trackingDatas = trackingDatas;
+    //     }
+    //     public string token;
+    //     public Dictionary<uint, StageData> trackingDatas;
+    // }
 
     public class CoroutineRunner : MonoBehaviour
     {
@@ -17,7 +42,7 @@ public static class HttpsConnector
             {
                 if (_instance == null)
                 {
-                    var runnerObj = new GameObject("CoroutineRunner");
+                    GameObject runnerObj = new GameObject("CoroutineRunner");
                     Object.DontDestroyOnLoad(runnerObj);
                     _instance = runnerObj.AddComponent<CoroutineRunner>();
                 }
@@ -29,16 +54,15 @@ public static class HttpsConnector
     public static void doLogin(string plainUsername, string plainPassword)
     {
         const string mode = "AUTHENTICATE";
-        const string url = TomaTechAPIURL;
-
-        string hashedPassword = ComputeSHA256(plainPassword);
+        const string url = TOMATECHAPIURL;
+        string hashedPassword = ENV.computeHash(plainPassword);
+        AccountData accountData = new AccountData(plainUsername, hashedPassword);
 
         CoroutineRunner.Instance.StartCoroutine(
             PostForm(
-                url,
-                mode,
-                plainUsername,
-                hashedPassword
+                url: url,
+                mode: mode,
+                accountData: accountData
             )
         );
     }
@@ -46,77 +70,106 @@ public static class HttpsConnector
     public static void createAcconut(string plainUsername, string plainPassword)
     {
         const string mode = "CREATE";
-        const string url = TomaTechAPIURL;
-;
-        string hashedPassword = ComputeSHA256(plainPassword);
+        const string url = TOMATECHAPIURL;
+        string hashedPassword = ENV.computeHash(plainPassword);
+        AccountData accountData = new AccountData(plainUsername, hashedPassword);
 
         CoroutineRunner.Instance.StartCoroutine(
             PostForm(
-                    url,
-                    mode,
-                    plainUsername,
-                    hashedPassword
+                    url: url,
+                    mode: mode,
+                    accountData: accountData
                 )
         );
     }
 
-    // public static void pushTrackerData(StageProgressionTracker stageProgressionTracker)
-    // {
-    //     const string mode = "PUSH";
-    //     const string url = TomaTechAPIURL;
-
-
-    //     // CoroutineRunner.Instance.StartCoroutine(
-    //     //     PostForm(
-    //     //             url,
-    //     //             mode,
-    //     //         )
-    //     // );
-    // }
-
-    // public static void pullTrackerData(StageProgressionTracker stageProgressionTracker)
-    // {
-    //     const string mode = "PULL";
-    //     const string url = TomaTechAPIURL;
-
-
-    //     // CoroutineRunner.Instance.StartCoroutine(
-    //     //     PostForm(
-    //     //             url,
-    //     //             mode,
-    //     //         )
-    //     // );
-    // }
-
-    private static IEnumerator PostForm(string url, string mode, string username, string password)
+    public static void pushTrackerData(string token, Dictionary<uint, StageData> trackingDatas)
     {
-        WWWForm form = new WWWForm();
-        form.AddField("mode", mode);
-        form.AddField("username", username);
-        form.AddField("password", password);
+        const string mode = "PUSH";
+        const string url = TOMATECHAPIURL;
 
-        using (UnityWebRequest request = UnityWebRequest.Post(url, form))
+        CoroutineRunner.Instance.StartCoroutine(
+            PostForm(
+                    url: url,
+                    mode: mode,
+                    token: token,
+                    trackingDatas: trackingDatas
+                )
+        );
+    }
+
+    public static Dictionary<uint, StageData> pullTrackerData(string token) // TODO:
+    {
+        const string mode = "PULL";
+        const string url = TOMATECHAPIURL;
+
+        CoroutineRunner.Instance.StartCoroutine(
+            PostForm(
+                    url: url,
+                    mode: mode,
+                    token: token,
+                )
+        );
+        return tokenData.trackingDatas;
+    }
+
+    private static IEnumerator PostForm(string url, string mode, AccountData accountData)
+    {
+        var data = new
         {
+            mode = mode,
+            accountData = accountData
+        };
+
+        string jsonPayload = JsonUtility.ToJson(data);
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonPayload);
+
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
             yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log("Login Success: " + request.downloadHandler.text);
+                Debug.Log("Success: " + request.downloadHandler.text);
             }
             else
             {
-                Debug.LogError("Login Failed: " + request.error);
+                Debug.LogError("Failed: " + request.error);
             }
         }
     }
 
-    public static string ComputeSHA256(string input) // TODO: more Secure
+    private static IEnumerator PostForm(string url, string mode, string token, Dictionary<uint, StageData> trackingDatas)
     {
-        using (SHA256 sha256 = SHA256.Create())
+        var data = new
         {
-            byte[] data = Encoding.UTF8.GetBytes(input);
-            byte[] hash = sha256.ComputeHash(data);
-            return System.BitConverter.ToString(hash).Replace("-", "").ToLower();
+            mode = mode,
+            token = token,
+        };
+
+        string jsonPayload = JsonUtility.ToJson(data);
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonPayload);
+
+        using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+        {
+            request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Success: " + request.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError("Failed: " + request.error);
+            }
         }
     }
 }
