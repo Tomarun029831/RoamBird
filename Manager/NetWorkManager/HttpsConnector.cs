@@ -107,7 +107,7 @@ public static class HttpsConnector
             PostForm(
                     url: url,
                     mode: mode,
-                    token: token,
+                    token: token
                 )
         );
         return tokenData.trackingDatas;
