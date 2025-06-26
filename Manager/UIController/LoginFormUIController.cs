@@ -23,8 +23,8 @@ public class LoginFormUIController : MonoBehaviour
         string password = this.Password;
         if (username == "" || password == "") { return; }
 
-        string token = await HttpsConnector.DoLogin(plainUsername: username, plainPassword: password);
-        HttpsConnector.PullTrackerData(token);
+        string token = await UserAPIClient.DoLogin(plainUsername: username, plainPassword: password);
+        TrackerAPIClient.Pull(token);
     }
 
     public void OnCreateAccountButtonPressed()
@@ -33,7 +33,7 @@ public class LoginFormUIController : MonoBehaviour
         string password = this.Password;
         if (username == "" || password == "") { return; }
 
-        HttpsConnector.CreateAcconut(plainUsername: username, plainPassword: password);
+        UserAPIClient.CreateAcconut(plainUsername: username, plainPassword: password);
     }
 
     public void OnCloseButtonPressed()
