@@ -20,7 +20,7 @@ public static class HttpsConnector
         public string username;
         public string password;
     }
-    //
+
     // [System.Serializable]
     // private class TokenData
     // {
@@ -51,7 +51,7 @@ public static class HttpsConnector
         }
     }
 
-    public static void doLogin(string plainUsername, string plainPassword)
+    public static void DoLogin(string plainUsername, string plainPassword)
     {
         const string mode = "AUTHENTICATE";
         const string url = TOMATECHAPIURL;
@@ -67,7 +67,7 @@ public static class HttpsConnector
         );
     }
 
-    public static void createAcconut(string plainUsername, string plainPassword)
+    public static void CreateAcconut(string plainUsername, string plainPassword)
     {
         const string mode = "CREATE";
         const string url = TOMATECHAPIURL;
@@ -83,7 +83,7 @@ public static class HttpsConnector
         );
     }
 
-    public static void pushTrackerData(string token, Dictionary<uint, StageData> trackingDatas)
+    public static void PushTrackerData(string token, Dictionary<uint, StageData> trackingDatas)
     {
         const string mode = "PUSH";
         const string url = TOMATECHAPIURL;
@@ -98,7 +98,7 @@ public static class HttpsConnector
         );
     }
 
-    public static Dictionary<uint, StageData> pullTrackerData(string token) // TODO:
+    public static Dictionary<uint, StageData> PullTrackerData(string token) // TODO:
     {
         const string mode = "PULL";
         const string url = TOMATECHAPIURL;

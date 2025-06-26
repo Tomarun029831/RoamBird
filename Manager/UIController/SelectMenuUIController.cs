@@ -5,22 +5,13 @@ public class SelectMenuUIController : MonoBehaviour
     [SerializeField] private PauseMenuUIController pauseMenuUIController;
     [SerializeField] private GameObject selectMenu;
 
-    public void Awake()
-    {
-        pauseMenuUIController = FindFirstObjectByType<PauseMenuUIController>();
-    }
+    public void Awake() => pauseMenuUIController = FindFirstObjectByType<PauseMenuUIController>();
 
-    public void Active()
-    {
-        selectMenu.SetActive(true);
-    }
+    public void Active() => selectMenu.SetActive(true);
 
-    public void OnEscPressed()
-    {
-        selectMenu.SetActive(false);
-    }
+    public void OnEscPressed() => selectMenu.SetActive(false);
 
-    public void OnStage1Pressed()
+    public void OnStage1Pressed() // TODO: code it more simply
     {
         pauseMenuUIController.ToggleActiveOfPauseMenuCanvas();
         SceneChanger.LoadSceneAt(1);

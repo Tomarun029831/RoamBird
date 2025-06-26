@@ -8,41 +8,34 @@ namespace Assets.Scripts.Util.Delay
     /// <typeparam name="T"></typeparam>
     public class InputHolder<T>
     {
-        private Dictionary<T, bool> key_inputs;
-        public Dictionary<T, bool> Key_Inputs => key_inputs;
+        private Dictionary<T, bool> keyInputs;
+        public Dictionary<T, bool> KeyInputs => keyInputs;
 
-        public InputHolder() { key_inputs = new(); }
-        public InputHolder(int _capacity) { key_inputs = new Dictionary<T, bool>(_capacity); }
-        public InputHolder(T _predefinedKey)
+        public InputHolder() => keyInputs = new();
+        public InputHolder(int _capacity) => keyInputs = new Dictionary<T, bool>(_capacity);
+        public InputHolder(T _predefinedKey) => keyInputs = new() { { _predefinedKey, false } };
+        public InputHolder(IEnumerable<T> predefinedKeys)
         {
-            key_inputs = new() { { _predefinedKey, false } };
-        }
-        public InputHolder(IEnumerable<T> _predefinedKeys)
-        {
-            key_inputs = new();
-            foreach (var ele in _predefinedKeys)
+            keyInputs = new();
+            foreach (var ele in predefinedKeys)
             {
-                key_inputs[ele] = false;
+                keyInputs[ele] = false;
             }
         }
 
-        public void HoldInput(T _key)
-        {
-            key_inputs[_key] = true;
-        }
+        public void HoldInput(T key) => keyInputs[key] = true;
 
-        public bool ConsumeInput(T _key)
+        public bool ConsumeInput(T key)
         {
-
-            if (!key_inputs.ContainsKey(_key)) // process on key_inputs(Field) doesn't contain _key
+            if (!keyInputs.ContainsKey(key)) // process on keyInputs(Field) doesn't contain key
             {
                 return false;
             }
-            else // process on key_inputs(Field) contain _key
+            else // process on keyInputs(Field) contain key
             {
-                if (key_inputs[_key])
+                if (keyInputs[key])
                 {
-                    key_inputs[_key] = false;
+                    keyInputs[key] = false;
                     return true;
                 }
                 else
@@ -51,7 +44,7 @@ namespace Assets.Scripts.Util.Delay
                 }
             }
 
-            // return key_inputs[_key] && (key_inputs[_key] = false) == false;
+            // return keyInputs[key] && (keyInputs[key] = false) == false;
         }
     }
 }

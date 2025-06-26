@@ -4,11 +4,11 @@ using System.Diagnostics;
 
 public class StageData
 {
-    public TimeSpan TotalTimer = TimeSpan.Zero;
-    public TimeSpan TimerPerStage = TimeSpan.MaxValue;
-    public Stopwatch CurrentTimer = new();
-    public uint TotalGoalCounter = 0;
-    public uint StreakGoalCounter = 0;
+    public TimeSpan totalTimer = TimeSpan.Zero;
+    public TimeSpan timerPerStage = TimeSpan.MaxValue;
+    public Stopwatch currentTimer = new();
+    public uint totalGoalCounter = 0;
+    public uint streakGoalCounter = 0;
 }
 
 public static class StageProgressionTracker
@@ -36,7 +36,7 @@ public static class StageProgressionTracker
     {
         StageData data = GetStageData(currentStageBuildIndex);
         if (state != State.InReady) return;
-        data.CurrentTimer.Restart();
+        data.currentTimer.Restart();
         state = State.InTracking;
     }
 
@@ -44,26 +44,26 @@ public static class StageProgressionTracker
     {
         StageData data = GetStageData(currentStageBuildIndex);
         if (data == null || state != State.InTracking) return;
-        data.CurrentTimer.Stop();
+        data.currentTimer.Stop();
 
         if (goalAchieved)
         {
             // === Streak ===
-            data.StreakGoalCounter++;
-            data.TimerPerStage = data.TimerPerStage > data.CurrentTimer.Elapsed ? data.CurrentTimer.Elapsed : data.TimerPerStage;
+            data.streakGoalCounter++;
+            data.timerPerStage = data.timerPerStage > data.currentTimer.Elapsed ? data.currentTimer.Elapsed : data.timerPerStage;
             // === Total ===
-            data.TotalGoalCounter++;
+            data.totalGoalCounter++;
         }
         else
         {
-            data.StreakGoalCounter = 0;
+            data.streakGoalCounter = 0;
         }
-        data.TotalTimer += data.CurrentTimer.Elapsed;
+        data.totalTimer += data.currentTimer.Elapsed;
 
         state = State.InStop;
     }
 
-    public static Dictionary<uint, StageData> extractStageDatas() => stages;
+    public static Dictionary<uint, StageData> ExtractStageDatas => stages;
 
     public static StageData GetCurrentStageData()
     {

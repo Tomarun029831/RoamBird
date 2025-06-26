@@ -6,16 +6,13 @@ public class CameraHandler : MonoBehaviour
     [SerializeField] private GameObject target;
     [SerializeField] private Vector2 startCoordinate;
     [SerializeField] private Vector2 endCoordinate;
-    [SerializeField] private bool TrackY;
+    [SerializeField] private bool trackY;
 
-    void Awake()
-    {
-        initPosition = transform.position;
-    }
+    void Awake() => initPosition = transform.position;
 
     void LateUpdate()
     {
-        if (TrackY)
+        if (trackY)
         {
             TrackTargetY(target.transform.position.y);
         }
@@ -37,8 +34,5 @@ public class CameraHandler : MonoBehaviour
         transform.position = new(transform.position.x, targetY, -10);
     }
 
-    public void Init()
-    {
-        transform.position = initPosition;
-    }
+    public void Init() => transform.position = initPosition;
 }

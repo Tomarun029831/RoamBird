@@ -7,10 +7,7 @@ public static class SceneInitializer
     {
         Entity[] entities = SceneScanner.ScanAllEntities();
         CameraHandler cameraHandler = SceneScanner.ScanCameraHandler();
-        foreach (Entity entity in entities)
-        {
-            entity.Init();
-        }
+        foreach (Entity entity in entities) { entity.Init(); }
         cameraHandler.Init();
 
         if (StageProgressionTracker.state == StageProgressionTracker.State.InTracking) { StageProgressionTracker.StopTrack(false); }

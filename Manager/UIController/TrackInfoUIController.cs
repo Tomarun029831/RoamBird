@@ -24,12 +24,12 @@ public class TrackInfoUIController : MonoBehaviour
 
     public void UpdateTrackInfo(StageData track)
     {
-        TimeSpan totalTimerProperty = track.TotalTimer;
-        TimeSpan TimerPerStageProperty = track.TimerPerStage == TimeSpan.MaxValue ? TimeSpan.Zero : track.TimerPerStage;
+        TimeSpan totalTimerProperty = track.totalTimer;
+        TimeSpan TimerPerStageProperty = track.timerPerStage == TimeSpan.MaxValue ? TimeSpan.Zero : track.timerPerStage;
 
-        totalCount.text = track.TotalGoalCounter.ToString();
-        streakCount.text = track.StreakGoalCounter.ToString();
-        totalTimer.text = totalTimerProperty.Seconds.ToString() + "." + track.TotalTimer.Milliseconds.ToString() + "s";
+        totalCount.text = track.totalGoalCounter.ToString();
+        streakCount.text = track.streakGoalCounter.ToString();
+        totalTimer.text = totalTimerProperty.Seconds.ToString() + "." + track.totalTimer.Milliseconds.ToString() + "s";
         currentTimer.text = TimerPerStageProperty.Seconds.ToString() + "." + TimerPerStageProperty.Milliseconds.ToString() + "s";
     }
 }

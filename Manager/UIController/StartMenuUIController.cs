@@ -4,12 +4,9 @@ public class StartMenuUIControllerController : MonoBehaviour
 {
     [SerializeField] private PauseMenuUIController pauseMenuUIController;
     [SerializeField] private SelectMenuUIController selectMenuUIController;
-    // [SerializeField] private LoginFormUIController loginFormUIController;
+    [SerializeField] private LoginFormUIController loginFormUIController;
 
-    public void Awake()
-    {
-        pauseMenuUIController = FindFirstObjectByType<PauseMenuUIController>();
-    }
+    public void Awake() => pauseMenuUIController = FindFirstObjectByType<PauseMenuUIController>();
 
     public void OnStartButtonPressed()
     {
@@ -17,18 +14,9 @@ public class StartMenuUIControllerController : MonoBehaviour
         SceneChanger.ChangeFarwardScene();
     }
 
-    public void OnSelectButtonPressed()
-    {
-        selectMenuUIController.Active();
-    }
+    public void OnSelectButtonPressed() => selectMenuUIController.Active();
 
-    public void OnButtonToLoginForm()
-    {
-        // loginFormUIController.Active();
-    }
+    public void OnButtonToLoginForm() => loginFormUIController.Active();
 
-    public void OnConfigButtonPressed()
-    {
-
-    }
+    public void OnConfigButtonPressed() { }
 }

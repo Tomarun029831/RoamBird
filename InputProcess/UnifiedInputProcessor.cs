@@ -30,7 +30,7 @@ public class UnifiedInputProcessor : MonoBehaviour
         // ========== Get Input through converter ==========
         foreach (IInputConverter converter in inputConverter)
         {
-            converter.Update();
+            converter.SyncInputState();
             // ========== Processing Unified Input ==========
             if (!converter.ConsumeTab()) { continue; }
             pauseMenuUIController.ToggleActiveOfPausePanel();

@@ -7,22 +7,13 @@ public class KeyboardInputConverter : IInputConverter
 {
     private InputHolder<KeyCode> KeyboardHolder;
 
-    public KeyboardInputConverter()
-    {
-        KeyboardHolder = new InputHolder<KeyCode>(new List<KeyCode> { KeyCode.Space, KeyCode.Tab });
-    }
+    public KeyboardInputConverter() => KeyboardHolder = new InputHolder<KeyCode>(new List<KeyCode> { KeyCode.Space, KeyCode.Tab });
 
-    public bool ConsumeSpace()
-    {
-        return KeyboardHolder.ConsumeInput(KeyCode.Space);
-    }
+    public bool ConsumeSpace() => KeyboardHolder.ConsumeInput(KeyCode.Space);
 
-    public bool ConsumeTab()
-    {
-        return KeyboardHolder.ConsumeInput(KeyCode.Tab);
-    }
+    public bool ConsumeTab() => KeyboardHolder.ConsumeInput(KeyCode.Tab);
 
-    public void Update()
+    public void SyncInputState()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
