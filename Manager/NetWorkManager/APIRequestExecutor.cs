@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System.Text;
-using System.Collections;
+using System.Threading.Tasks;
 
 public static class APIRequestExecutor
 {
-    public static IEnumerator PostJson(string url, object payload, System.Action<string> onSuccess = null)
+    public static async Task<(bool isSuccess, string response)> PostJson(string url, object payload)
     {
         string json = JsonConvert.SerializeObject(payload);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
@@ -17,12 +17,12 @@ public static class APIRequestExecutor
             req.downloadHandler = new DownloadHandlerBuffer();
             req.SetRequestHeader("Content-Type", "application/json");
 
-            yield return req.SendWebRequest();
+            await req.SendWebRequest();
 
-            if (req.result == UnityWebRequest.Result.Success)
-                onSuccess?.Invoke(req.downloadHandler.text);
-            else
-                Debug.LogError(req.error);
+            if (req.result != UnityWebRequest.Result.Success)
+                return (false, null);
+
+            return (true, req.downloadHandler.text);
         }
     }
 }

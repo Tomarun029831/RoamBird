@@ -1,45 +1,42 @@
+using System.Threading.Tasks;
+
 public static class UserAPIClient
 {
     private const string APIURL = ENV.TOMATECHAPI;
-    private static string _token = "";
 
-    public static void DoLogin(string plainUsername, string plainPassword)
+    public static async Task<(bool isSuccess, string token)> DoLogin(string plainUsername, string plainPassword)
     {
+        string token = "";
         const string mode = "AUTHENTICATE";
         const string url = APIURL;
         string hashedPassword = ENV.ComputeHash(plainPassword);
-        AccountData accountData = new AccountData(plainUsername, hashedPassword);
         var jsonObj = new
         {
             mode = mode,
-            accountData = accountData
+            accountData = new { username = plainUsername, password = hashedPassword }
         };
 
-        CoroutineRunner.Instance.StartCoroutine(
-            APIRequestExecutor.PostJson(
-                url: url,
-                payload: jsonObj
-            )
-        );
+        (bool isSuccess, string response) = await APIRequestExecutor.PostJson(url: url, payload: jsonObj);
+        // token = extractToken(response); // TODO:
+
+        return (isSuccess, token);
     }
 
-    public static void CreateAcconut(string plainUsername, string plainPassword)
+    public static async Task<(bool isSuccess, string token)> CreateAcconut(string plainUsername, string plainPassword)
     {
+        string token = "";
         const string mode = "CREATE";
         const string url = APIURL;
         string hashedPassword = ENV.ComputeHash(plainPassword);
-        AccountData accountData = new AccountData(plainUsername, hashedPassword);
         var jsonObj = new
         {
             mode = mode,
-            accountData = accountData
+            accountData = new { username = plainUsername, password = hashedPassword }
         };
 
-        CoroutineRunner.Instance.StartCoroutine(
-            APIRequestExecutor.PostJson(
-                    url: url,
-                    payload: jsonObj
-                )
-        );
+        (bool isSuccess, string response) = await APIRequestExecutor.PostJson(url: url, payload: jsonObj);
+        // token = extractToken(response); // TODO: 
+
+        return (isSuccess, token);
     }
 }

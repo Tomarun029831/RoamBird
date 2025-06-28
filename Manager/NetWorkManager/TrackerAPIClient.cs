@@ -1,30 +1,39 @@
-using UnityEngine;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
 using Newtonsoft.Json;
 
 public static class TrackerAPIClient
 {
-    private const string Url = ENV.TOMATECHAPI;
+    private const string URL = ENV.TOMATECHAPI;
 
-    public static void Push(string token, Dictionary<uint, StageData> trackingData)
+    public static async Task<bool> Push(string token, Dictionary<uint, StageData> trackingData)
     {
-        var payload = new { mode = "PUSH", token = token, trackingDatas = trackingData };
+        var payload = new
+        {
+            mode = "PUSH",
+            token = token,
+            trackingDatas = trackingData
+        };
 
-        CoroutineRunner.Instance.StartCoroutine(
-            APIRequestExecutor.PostJson(Url, payload, res => Debug.Log("Pushed: " + res))
-        );
+        (bool isSucsess, string response) = await APIRequestExecutor.PostJson(URL, payload);
+        // isSucsess = parse(response); // TODO:
+
+        return (isSucsess);
     }
 
-    public static void Pull(string token, System.Action<Dictionary<uint, StageData>> onResult)
+    public static async Task<(bool isSucsess, Dictionary<uint, StageData> trackedData)> Pull(string token)
     {
-        var payload = new { mode = "PULL", token = token };
+        Dictionary<uint, StageData> trackedData = null;
+        var payload = new
+        {
+            mode = "PULL",
+            token = token
+        };
 
-        CoroutineRunner.Instance.StartCoroutine(
-            APIRequestExecutor.PostJson(Url, payload, res =>
-            {
-                var tokenData = JsonConvert.DeserializeObject<TokenData>(res);
-                onResult?.Invoke(tokenData.trackingDatas);
-            })
-        );
+        (bool isSucsess, string response) = await APIRequestExecutor.PostJson(URL, payload);
+        // (isSucsess, trackingData) = parse(response); // TODO:
+
+        return (isSucsess, trackedData);
     }
 }
