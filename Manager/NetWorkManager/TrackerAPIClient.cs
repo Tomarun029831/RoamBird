@@ -15,23 +15,46 @@ public static class TrackerAPIClient
             trackingDatas = trackingData
         };
 
-        (bool isSucsess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: URL, payload: payload, token: token);
-        // isSucsess = parse(response); // TODO:
+        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: URL, payload: payload, token: token);
+        if (!isSuccess) { return false; }
 
-        return (isSucsess);
+        bool apiSuccess = false;
+        try
+        {
+            ResponseToTrackedData responseJsonObj = JsonConvert.DeserializeObject<ResponseToTrackedData>(response.downloadHandler.text);
+            apiSuccess = responseJsonObj.isSuccess;
+        }
+        catch (System.Exception)
+        {
+            return false;
+        }
+
+        return (apiSuccess);
     }
 
     public static async Task<(bool isSucsess, Dictionary<uint, StageData> trackedData)> Pull(string token)
     {
-        Dictionary<uint, StageData> trackedData = null;
         var payload = new
         {
             mode = "PULL",
         };
 
-        (bool isSucsess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: URL, payload: payload, token: token);
-        // (isSucsess, trackingData) = parse(response); // TODO:
+        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: URL, payload: payload, token: token);
+        if (!isSuccess) { return (false, null); }
 
-        return (isSucsess, trackedData);
+        bool apiSuccess = false;
+        Dictionary<uint, StageData> trackedData = null;
+        try
+        {
+            ResponseToTrackedData responseJsonObj = JsonConvert.DeserializeObject<ResponseToTrackedData>(response.downloadHandler.text);
+            apiSuccess = responseJsonObj.isSuccess;
+            trackedData = responseJsonObj.trackedData;
+        }
+        catch (System.Exception)
+        {
+            return (false, null);
+        }
+
+        return (apiSuccess, trackedData);
     }
 }
