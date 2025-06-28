@@ -12,14 +12,8 @@ public class CameraHandler : MonoBehaviour
 
     void LateUpdate()
     {
-        if (trackY)
-        {
-            TrackTargetY(target.transform.position.y);
-        }
-        else
-        {
-            TrackTargetX(target.transform.position.x);
-        }
+        if (trackY) TrackTargetY(target.transform.position.y);
+        TrackTargetX(target.transform.position.x);
     }
 
     private void TrackTargetX(float targetX)
