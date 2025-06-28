@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 public static class APIRequestExecutor
 {
-    public static async Task<(bool isSuccess, string response)> PostJson(string url, object payload)
+    public static async Task<(bool isSuccess, UnityWebRequest response)> PostJson(string url, object payload, string token = null)
     {
         string json = JsonConvert.SerializeObject(payload);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
@@ -16,13 +16,17 @@ public static class APIRequestExecutor
             req.uploadHandler = new UploadHandlerRaw(jsonBytes);
             req.downloadHandler = new DownloadHandlerBuffer();
             req.SetRequestHeader("Content-Type", "application/json");
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                req.SetRequestHeader("Authorization", $"Bearer {token}");
+            }
 
             await req.SendWebRequest();
 
             if (req.result != UnityWebRequest.Result.Success)
                 return (false, null);
 
-            return (true, req.downloadHandler.text);
+            return (true, req);
         }
     }
 }

@@ -1,6 +1,6 @@
+using UnityEngine.Networking;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
 using Newtonsoft.Json;
 
 public static class TrackerAPIClient
@@ -12,11 +12,10 @@ public static class TrackerAPIClient
         var payload = new
         {
             mode = "PUSH",
-            token = token,
             trackingDatas = trackingData
         };
 
-        (bool isSucsess, string response) = await APIRequestExecutor.PostJson(URL, payload);
+        (bool isSucsess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: URL, payload: payload, token: token);
         // isSucsess = parse(response); // TODO:
 
         return (isSucsess);
@@ -28,10 +27,9 @@ public static class TrackerAPIClient
         var payload = new
         {
             mode = "PULL",
-            token = token
         };
 
-        (bool isSucsess, string response) = await APIRequestExecutor.PostJson(URL, payload);
+        (bool isSucsess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: URL, payload: payload, token: token);
         // (isSucsess, trackingData) = parse(response); // TODO:
 
         return (isSucsess, trackedData);
