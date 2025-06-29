@@ -18,7 +18,7 @@ public class LoginFormUIController : MonoBehaviour
         plainPassword.text = "";
     }
 
-    public async Task<(bool isSuccess, string token, Dictionary<uint, StageData> trackedData)> OnLoginButtonPressed()
+    public async Task<(bool loginSucceeded, string token, Dictionary<uint, StageData> trackedData)> OnLoginButtonPressed()
     {
         string plainUsername = this.PlainUsername;
         string plainPassword = this.PlainPassword;
@@ -27,20 +27,20 @@ public class LoginFormUIController : MonoBehaviour
         (bool loginSucceeded, string token) = await UserAPIClient.DoLogin(plainUsername: plainUsername, plainPassword: plainPassword);
         if (!loginSucceeded) { Debug.Log("Login was failed."); return (false, null, null); }
 
-        (bool retrievalSucceeded, Dictionary<uint, StageData> trackedData) = await TrackerAPIClient.Pull(token);
+        (bool retrievalSucceeded, Dictionary<uint, StageData> trackedData) = await TrackerAPIClient.Pull(token); // HACK:
         if (!retrievalSucceeded) { Debug.Log("Pulling track-data was failed."); return (false, null, null); }
 
         return (retrievalSucceeded, token, trackedData);
     }
 
-    public async Task<(bool isSuccess, string token)> OnCreateAccountButtonPressed()
+    public async Task<(bool creationSuccess, string token)> OnCreateAccountButtonPressed()
     {
         string plainUsername = this.PlainUsername;
         string plainPassword = this.PlainPassword;
         if (plainUsername == "" || plainPassword == "") { return (false, null); }
 
-        (bool isSuccess, string token) = await UserAPIClient.CreateAcconut(plainUsername: plainUsername, plainPassword: plainPassword);
-        return (isSuccess, token);
+        (bool creationSuccess, string token) = await UserAPIClient.CreateAcconut(plainUsername: plainUsername, plainPassword: plainPassword);
+        return (creationSuccess, token);
     }
 
     public void OnCloseButtonPressed() => loginForm.SetActive(false);

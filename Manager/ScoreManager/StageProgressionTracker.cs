@@ -6,9 +6,9 @@ public class StageData
 {
     public TimeSpan totalTimer = TimeSpan.Zero;
     public TimeSpan timerPerStage = TimeSpan.MaxValue;
-    public Stopwatch currentTimer = new();
     public uint totalGoalCounter = 0;
     public uint streakGoalCounter = 0;
+    public Stopwatch currentTimer = new();
 }
 
 public static class StageProgressionTracker

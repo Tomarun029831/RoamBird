@@ -24,10 +24,7 @@ public static class TrackerAPIClient
             ResponseToTrackedData responseJsonObj = JsonConvert.DeserializeObject<ResponseToTrackedData>(response.downloadHandler.text);
             apiSuccess = responseJsonObj.isSuccess;
         }
-        catch (System.Exception)
-        {
-            return false;
-        }
+        catch (System.Exception) { return false; }
 
         return (apiSuccess);
     }
@@ -50,10 +47,7 @@ public static class TrackerAPIClient
             apiSuccess = responseJsonObj.isSuccess;
             trackedData = responseJsonObj.trackedData;
         }
-        catch (System.Exception)
-        {
-            return (false, null);
-        }
+        catch (System.Exception) { return (false, null); }
 
         return (apiSuccess, trackedData);
     }

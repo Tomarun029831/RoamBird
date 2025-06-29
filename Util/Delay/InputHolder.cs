@@ -8,18 +8,21 @@ namespace Assets.Scripts.Util.Delay
     /// <typeparam name="T"></typeparam>
     public class InputHolder<T>
     {
-        private Dictionary<T, bool> keyInputs;
-        public Dictionary<T, bool> KeyInputs => keyInputs;
+        private readonly Dictionary<T, bool> keyInputs;
+        public IReadOnlyDictionary<T, bool> KeyInputs => keyInputs;
 
-        public InputHolder() => keyInputs = new();
-        public InputHolder(int _capacity) => keyInputs = new Dictionary<T, bool>(_capacity);
-        public InputHolder(T _predefinedKey) => keyInputs = new() { { _predefinedKey, false } };
+        public InputHolder() => keyInputs = new Dictionary<T, bool>();
+
+        public InputHolder(int capacity) => keyInputs = new Dictionary<T, bool>(capacity);
+
+        public InputHolder(T predefinedKey) => keyInputs = new Dictionary<T, bool> { { predefinedKey, false } };
+
         public InputHolder(IEnumerable<T> predefinedKeys)
         {
-            keyInputs = new();
-            foreach (var ele in predefinedKeys)
+            keyInputs = new Dictionary<T, bool>();
+            foreach (var key in predefinedKeys)
             {
-                keyInputs[ele] = false;
+                keyInputs[key] = false;
             }
         }
 
@@ -27,24 +30,12 @@ namespace Assets.Scripts.Util.Delay
 
         public bool ConsumeInput(T key)
         {
-            if (!keyInputs.ContainsKey(key)) // process on keyInputs(Field) doesn't contain key
+            if (keyInputs.TryGetValue(key, out bool isHeld) && isHeld)
             {
-                return false;
+                keyInputs[key] = false;
+                return true;
             }
-            else // process on keyInputs(Field) contain key
-            {
-                if (keyInputs[key])
-                {
-                    keyInputs[key] = false;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            // return keyInputs[key] && (keyInputs[key] = false) == false;
+            return false;
         }
     }
 }
