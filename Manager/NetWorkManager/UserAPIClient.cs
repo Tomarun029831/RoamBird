@@ -9,15 +9,15 @@ public static class UserAPIClient
     public static async Task<(bool isSuccess, string token)> DoLogin(string plainUsername, string plainPassword)
     {
         const string mode = "AUTHENTICATE";
-        const string url = APIURL;
         string hashedPassword = ENV.ComputeHash(plainPassword);
         var jsonObj = new
         {
             mode = mode,
             accountData = new { username = plainUsername, password = hashedPassword }
         };
+        string stringfiedObj = JsonConvert.SerializeObject(jsonObj);
 
-        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: url, payload: jsonObj);
+        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedObj);
         if (!isSuccess) { return (false, null); }
 
         ResponseToAccount responseJsonObj = null;
@@ -34,15 +34,15 @@ public static class UserAPIClient
     public static async Task<(bool isSuccess, string token)> CreateAcconut(string plainUsername, string plainPassword)
     {
         const string mode = "CREATE";
-        const string url = APIURL;
         string hashedPassword = ENV.ComputeHash(plainPassword);
         var jsonObj = new
         {
             mode = mode,
             accountData = new { username = plainUsername, password = hashedPassword }
         };
+        string stringfiedObj = JsonConvert.SerializeObject(jsonObj);
 
-        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: url, payload: jsonObj);
+        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedObj);
         if (!isSuccess) { return (false, null); }
 
         ResponseToAccount responseJsonObj = null;

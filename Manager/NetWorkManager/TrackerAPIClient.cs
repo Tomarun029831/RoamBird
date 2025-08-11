@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 public static class TrackerAPIClient
 {
-    private const string URL = ENV.TOMATECHAPI;
+    private const string APIURL = ENV.TOMATECHAPI;
 
     public static async Task<bool> Push(string token, Dictionary<uint, StageData> trackingData)
     {
@@ -14,8 +14,9 @@ public static class TrackerAPIClient
             mode = "PUSH",
             trackingDatas = trackingData
         };
+        string stringfiedPayload = JsonConvert.SerializeObject(payload);
 
-        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: URL, payload: payload, token: token);
+        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload, token: token);
         if (!isSuccess) { return false; }
 
         bool apiSuccess = false;
@@ -35,8 +36,9 @@ public static class TrackerAPIClient
         {
             mode = "PULL",
         };
+        string stringfiedPayload = JsonConvert.SerializeObject(payload);
 
-        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: URL, payload: payload, token: token);
+        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload, token: token);
         if (!isSuccess) { return (false, null); }
 
         bool apiSuccess = false;
