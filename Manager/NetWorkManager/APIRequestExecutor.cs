@@ -1,15 +1,13 @@
 using UnityEngine;
 using UnityEngine.Networking;
-using Newtonsoft.Json;
 using System.Text;
 using System.Threading.Tasks;
 
 public static class APIRequestExecutor
 {
-    public static async Task<(bool isSuccess, UnityWebRequest response)> PostJson(string url, object payload, string token = null)
+    public static async Task<(bool isSuccess, UnityWebRequest response)> PostJson(string url, string payload, string token = null)
     {
-        string json = JsonConvert.SerializeObject(payload);
-        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(payload);
 
         using (UnityWebRequest req = new UnityWebRequest(url, "POST"))
         {
