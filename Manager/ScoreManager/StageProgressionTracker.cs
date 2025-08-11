@@ -8,11 +8,11 @@ public class StageData
     public TimeSpan timerPerStage = TimeSpan.MaxValue;
     public uint totalGoalCounter = 0;
     public uint streakGoalCounter = 0;
-    public Stopwatch currentTimer = new();
 }
 
 public static class StageProgressionTracker
 {
+    private static Stopwatch currentTimer = new();
     public enum State
     {
         InTracking,
@@ -36,7 +36,7 @@ public static class StageProgressionTracker
     {
         StageData data = GetStageData(currentStageBuildIndex);
         if (state != State.InReady) return;
-        data.currentTimer.Restart();
+        currentTimer.Restart();
         state = State.InTracking;
     }
 
@@ -44,21 +44,22 @@ public static class StageProgressionTracker
     {
         StageData data = GetStageData(currentStageBuildIndex);
         if (data == null || state != State.InTracking) return;
-        data.currentTimer.Stop();
+        currentTimer.Stop();
 
         if (goalAchieved)
         {
-            // === Streak ===
+            // streak
             data.streakGoalCounter++;
-            data.timerPerStage = data.timerPerStage > data.currentTimer.Elapsed ? data.currentTimer.Elapsed : data.timerPerStage;
-            // === Total ===
+            data.timerPerStage = data.timerPerStage > currentTimer.Elapsed ? currentTimer.Elapsed : data.timerPerStage;
+            // total
             data.totalGoalCounter++;
         }
         else
         {
+            // reset streak
             data.streakGoalCounter = 0;
         }
-        data.totalTimer += data.currentTimer.Elapsed;
+        data.totalTimer += currentTimer.Elapsed;
 
         state = State.InStop;
     }
