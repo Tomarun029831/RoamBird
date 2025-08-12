@@ -60,29 +60,4 @@ public static class TrackerAPIClient
         }
         catch (System.Exception) { return (false, null); }
     }
-
-    // public static async Task<(bool isSucsess, TrackingData trackedData)> Pull(string token)
-    // {
-    //     var payload = new
-    //     {
-    //         mode = "PULL",
-    //         token = token
-    //     };
-    //     string stringfiedPayload = JsonConvert.SerializeObject(payload);
-    //
-    //     (bool isSuccess, string response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload);
-    //     if (!isSuccess) return (false, null);
-    //
-    //     bool apiSuccess = false;
-    //     TrackingData trackedData = null;
-    //     try
-    //     {
-    //         ResponseToTrackedData responseJsonObj = JsonConvert.DeserializeObject<ResponseToTrackedData>(response);
-    //         apiSuccess = responseJsonObj.result == "success";
-    //         trackedData = responseJsonObj.payload;
-    //     }
-    //     catch (System.Exception) { return (false, null); }
-    //
-    //     return (apiSuccess, trackedData);
-    // }
 }

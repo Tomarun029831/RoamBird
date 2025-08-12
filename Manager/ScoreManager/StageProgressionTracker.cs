@@ -78,12 +78,11 @@ public static class StageProgressionTracker
         return GetStageData(targetIndex);
     }
 
+    public static void SetTrackingData(TrackingData trackindData) => stages = trackindData;
+
     private static void AddStage(uint stageBuildIndex)
     {
-        if (!stages.ContainsKey(stageBuildIndex))
-        {
-            stages[stageBuildIndex] = new StageData();
-        }
+        if (!stages.ContainsKey(stageBuildIndex)) stages[stageBuildIndex] = new StageData();
     }
 
     private static StageData GetStageData(uint stageBuildIndex)
