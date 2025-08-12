@@ -18,6 +18,19 @@ public class LoginFormUIController : MonoBehaviour
         plainPassword.text = "";
     }
 
+    public async void OnLoginButtonPressedWrapper()
+    {
+        var (success, token, data) = await OnLoginButtonPressed();
+        Debug.Log(success ? "success" : "failed" + ", " + token + ", " + data);
+    }
+
+    public async void OnCreateAccountButtonPressedWrapper()
+    {
+        var (success, token) = await OnCreateAccountButtonPressed();
+        Debug.Log(success ? "success" : "failed" + ", " + token);
+    }
+
+
     public async Task<(bool loginSucceeded, string token, Dictionary<uint, StageData> trackedData)> OnLoginButtonPressed()
     {
         string plainUsername = this.PlainUsername;
@@ -25,10 +38,10 @@ public class LoginFormUIController : MonoBehaviour
         if (plainUsername == "" || plainPassword == "") { return (false, null, null); }
 
         (bool loginSucceeded, string token) = await UserAPIClient.DoLogin(plainUsername: plainUsername, plainPassword: plainPassword);
-        if (!loginSucceeded) { Debug.Log("Login was failed."); return (false, null, null); }
+        if (!loginSucceeded) return (false, null, null);
 
         (bool retrievalSucceeded, Dictionary<uint, StageData> trackedData) = await TrackerAPIClient.Pull(token); // HACK:
-        if (!retrievalSucceeded) { Debug.Log("Pulling track-data was failed."); return (false, null, null); }
+        if (!retrievalSucceeded) return (false, null, null);
 
         return (retrievalSucceeded, token, trackedData);
     }
