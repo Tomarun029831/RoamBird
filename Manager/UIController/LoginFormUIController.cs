@@ -50,7 +50,7 @@ public class LoginFormUIController : MonoBehaviour
     {
         string plainUsername = this.PlainUsername;
         string plainPassword = this.PlainPassword;
-        if (plainUsername == "" || plainPassword == "") { return (false, null); }
+        if (plainUsername == "" || plainPassword == "") return (false, null);
 
         (bool creationSuccess, string token) = await UserAPIClient.CreateAcconut(plainUsername: plainUsername, plainPassword: plainPassword);
         return (creationSuccess, token);

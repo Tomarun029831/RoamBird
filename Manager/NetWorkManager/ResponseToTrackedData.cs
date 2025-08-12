@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public class ResponseToTrackedData
 {
-    public bool isSuccess;
+    public string result;
     public Dictionary<uint, StageData> trackedData;
 }
 

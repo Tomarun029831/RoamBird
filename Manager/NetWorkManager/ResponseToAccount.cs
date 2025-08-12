@@ -1,11 +1,8 @@
 public class ResponseToAccount
 {
-    public bool result;
-    public Payload payload;
+    public string result;
+    public string payload;
 }
-
-public class Payload { public string token; }
-
 
 /*
 === Success Case ===
