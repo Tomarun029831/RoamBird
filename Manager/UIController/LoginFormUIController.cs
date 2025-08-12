@@ -19,7 +19,8 @@ public class LoginFormUIController : MonoBehaviour
 
     public async void OnLoginButtonPressedWrapper()
     {
-        var (success, token, data) = await OnLoginButtonPressed();
+        var (success, token, receivedTrackingData) = await OnLoginButtonPressed();
+        StageProgressionTracker.SetTrackingData(receivedTrackingData);
     }
 
     public async void OnCreateAccountButtonPressedWrapper()
