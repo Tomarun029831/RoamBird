@@ -18,16 +18,16 @@ public static class UserAPIClient
         };
         string stringfiedObj = JsonConvert.SerializeObject(jsonObj);
 
-        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedObj);
-        if (!isSuccess) { return (false, null); }
+        (bool isSuccess, string receivedPayload) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedObj);
+        if (!isSuccess) return (false, null);
 
         ResponseToAccount responseJsonObj = null;
-        try { responseJsonObj = JsonConvert.DeserializeObject<ResponseToAccount>(response.downloadHandler.text); }
+        try { responseJsonObj = JsonConvert.DeserializeObject<ResponseToAccount>(receivedPayload); }
         catch (System.Exception) { return (false, null); }
-        if (responseJsonObj == null) { return (false, null); }
+        if (responseJsonObj == null) return (false, null);
 
-        bool apiSuccess = responseJsonObj.result;
-        string token = responseJsonObj.payload.token;
+        bool apiSuccess = responseJsonObj.result == "success";
+        string token = responseJsonObj.payload;
 
         return (apiSuccess, token);
     }
@@ -44,16 +44,15 @@ public static class UserAPIClient
         };
         string stringfiedObj = JsonConvert.SerializeObject(jsonObj);
 
-        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedObj);
-        if (!isSuccess) { return (false, null); }
-
+        (bool isSuccess, string receivedPayload) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedObj);
+        if (!isSuccess) return (false, null);
         ResponseToAccount responseJsonObj = null;
-        try { responseJsonObj = JsonConvert.DeserializeObject<ResponseToAccount>(response.downloadHandler.text); }
+        try { responseJsonObj = JsonConvert.DeserializeObject<ResponseToAccount>(receivedPayload); }
         catch (System.Exception) { return (false, null); }
-        if (responseJsonObj == null) { return (false, null); }
+        if (responseJsonObj == null) return (false, null);
 
-        bool apiSuccess = responseJsonObj.result;
-        string token = responseJsonObj.payload.token;
+        bool apiSuccess = responseJsonObj.result == "success";
+        string token = responseJsonObj.payload;
 
         return (apiSuccess, token);
     }

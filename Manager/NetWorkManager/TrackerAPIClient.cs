@@ -17,14 +17,14 @@ public static class TrackerAPIClient
         };
         string stringfiedPayload = JsonConvert.SerializeObject(payload);
 
-        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload);
-        if (!isSuccess) { return false; }
+        (bool isSuccess, string response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload);
+        if (!isSuccess) return false;
 
         bool apiSuccess = false;
         try
         {
-            ResponseToTrackedData responseJsonObj = JsonConvert.DeserializeObject<ResponseToTrackedData>(response.downloadHandler.text);
-            apiSuccess = responseJsonObj.isSuccess;
+            ResponseToTrackedData responseJsonObj = JsonConvert.DeserializeObject<ResponseToTrackedData>(response);
+            apiSuccess = responseJsonObj.result == "success";
         }
         catch (System.Exception) { return false; }
 
@@ -40,15 +40,15 @@ public static class TrackerAPIClient
         };
         string stringfiedPayload = JsonConvert.SerializeObject(payload);
 
-        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload);
-        if (!isSuccess) { return (false, null); }
+        (bool isSuccess, string response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload);
+        if (!isSuccess) return (false, null);
 
         bool apiSuccess = false;
         Dictionary<uint, StageData> trackedData = null;
         try
         {
-            ResponseToTrackedData responseJsonObj = JsonConvert.DeserializeObject<ResponseToTrackedData>(response.downloadHandler.text);
-            apiSuccess = responseJsonObj.isSuccess;
+            ResponseToTrackedData responseJsonObj = JsonConvert.DeserializeObject<ResponseToTrackedData>(response);
+            apiSuccess = responseJsonObj.result == "success";
             trackedData = responseJsonObj.trackedData;
         }
         catch (System.Exception) { return (false, null); }
