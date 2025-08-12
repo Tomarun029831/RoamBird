@@ -26,8 +26,8 @@ public static class UserAPIClient
         catch (System.Exception) { return (false, null); }
         if (responseJsonObj == null) { return (false, null); }
 
-        bool apiSuccess = responseJsonObj.isSuccess;
-        string token = responseJsonObj.token;
+        bool apiSuccess = responseJsonObj.result;
+        string token = responseJsonObj.payload.token;
 
         return (apiSuccess, token);
     }
@@ -52,8 +52,8 @@ public static class UserAPIClient
         catch (System.Exception) { return (false, null); }
         if (responseJsonObj == null) { return (false, null); }
 
-        bool apiSuccess = responseJsonObj.isSuccess;
-        string token = responseJsonObj.token;
+        bool apiSuccess = responseJsonObj.result;
+        string token = responseJsonObj.payload.token;
 
         return (apiSuccess, token);
     }
