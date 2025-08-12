@@ -12,11 +12,12 @@ public static class TrackerAPIClient
         var payload = new
         {
             mode = "PUSH",
+            token = token,
             trackingDatas = trackingData
         };
         string stringfiedPayload = JsonConvert.SerializeObject(payload);
 
-        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload, token: token);
+        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload);
         if (!isSuccess) { return false; }
 
         bool apiSuccess = false;
@@ -35,10 +36,11 @@ public static class TrackerAPIClient
         var payload = new
         {
             mode = "PULL",
+            token = token
         };
         string stringfiedPayload = JsonConvert.SerializeObject(payload);
 
-        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload, token: token);
+        (bool isSuccess, UnityWebRequest response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload);
         if (!isSuccess) { return (false, null); }
 
         bool apiSuccess = false;

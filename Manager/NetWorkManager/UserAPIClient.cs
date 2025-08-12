@@ -13,7 +13,8 @@ public static class UserAPIClient
         var jsonObj = new
         {
             mode = mode,
-            accountData = new { username = plainUsername, password = hashedPassword }
+            username = plainUsername,
+            password = hashedPassword
         };
         string stringfiedObj = JsonConvert.SerializeObject(jsonObj);
 
@@ -38,7 +39,8 @@ public static class UserAPIClient
         var jsonObj = new
         {
             mode = mode,
-            accountData = new { username = plainUsername, password = hashedPassword }
+            username = plainUsername,
+            password = hashedPassword
         };
         string stringfiedObj = JsonConvert.SerializeObject(jsonObj);
 
