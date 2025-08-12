@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 public class LoginFormUIController : MonoBehaviour
@@ -21,17 +20,15 @@ public class LoginFormUIController : MonoBehaviour
     public async void OnLoginButtonPressedWrapper()
     {
         var (success, token, data) = await OnLoginButtonPressed();
-        Debug.Log(success ? "success" : "failed" + ", " + token + ", " + data);
     }
 
     public async void OnCreateAccountButtonPressedWrapper()
     {
         var (success, token) = await OnCreateAccountButtonPressed();
-        Debug.Log(success ? "success" : "failed" + ", " + token);
     }
 
 
-    public async Task<(bool loginSucceeded, string token, Dictionary<uint, StageData> trackedData)> OnLoginButtonPressed()
+    public async Task<(bool loginSucceeded, string token, TrackingData trackedData)> OnLoginButtonPressed()
     {
         string plainUsername = this.PlainUsername;
         string plainPassword = this.PlainPassword;
@@ -40,7 +37,7 @@ public class LoginFormUIController : MonoBehaviour
         (bool loginSucceeded, string token) = await UserAPIClient.DoLogin(plainUsername: plainUsername, plainPassword: plainPassword);
         if (!loginSucceeded) return (false, null, null);
 
-        (bool retrievalSucceeded, Dictionary<uint, StageData> trackedData) = await TrackerAPIClient.Pull(token); // HACK:
+        (bool retrievalSucceeded, TrackingData trackedData) = await TrackerAPIClient.Pull(token);
         if (!retrievalSucceeded) return (false, null, null);
 
         return (retrievalSucceeded, token, trackedData);

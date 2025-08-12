@@ -1,6 +1,12 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+
+public class TrackingData : System.Collections.Generic.Dictionary<uint, StageData>
+{
+    public TrackingData() { }
+    public TrackingData(IDictionary<uint, StageData> dictionary) : base(dictionary) { }
+}
 
 public class StageData
 {
@@ -23,7 +29,7 @@ public static class StageProgressionTracker
 
     private static uint currentStageBuildIndex;
     public static uint CurrentStageBuildIndex => currentStageBuildIndex;
-    private static Dictionary<uint, StageData> stages = new();
+    private static TrackingData stages = new();
 
     public static void Ready(uint stageBuildIndex)
     {
@@ -64,7 +70,7 @@ public static class StageProgressionTracker
         state = State.InStop;
     }
 
-    public static Dictionary<uint, StageData> ExtractStageDatas => stages;
+    public static TrackingData ExtractStageDatas => stages;
 
     public static StageData GetCurrentStageData()
     {

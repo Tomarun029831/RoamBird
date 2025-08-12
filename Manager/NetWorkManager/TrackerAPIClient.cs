@@ -1,6 +1,6 @@
-using UnityEngine.Networking;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using Newtonsoft.Json;
 
 public static class TrackerAPIClient
@@ -31,7 +31,8 @@ public static class TrackerAPIClient
         return (apiSuccess);
     }
 
-    public static async Task<(bool isSucsess, Dictionary<uint, StageData> trackedData)> Pull(string token)
+
+    public static async Task<(bool isSuccess, TrackingData trackedData)> Pull(string token)
     {
         var payload = new
         {
@@ -43,16 +44,45 @@ public static class TrackerAPIClient
         (bool isSuccess, string response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload);
         if (!isSuccess) return (false, null);
 
-        bool apiSuccess = false;
-        Dictionary<uint, StageData> trackedData = null;
         try
         {
             ResponseToTrackedData responseJsonObj = JsonConvert.DeserializeObject<ResponseToTrackedData>(response);
-            apiSuccess = responseJsonObj.result == "success";
-            trackedData = responseJsonObj.trackedData;
+            if (responseJsonObj == null || responseJsonObj.result != "success" || responseJsonObj.payload == null)
+                return (false, null);
+
+            var dictUintKey = responseJsonObj.payload.ToDictionary(
+                kvp => uint.Parse(kvp.Key),
+                kvp => kvp.Value
+            );
+
+            TrackingData trackedData = new TrackingData(dictUintKey);
+            return (true, trackedData);
         }
         catch (System.Exception) { return (false, null); }
-
-        return (apiSuccess, trackedData);
     }
+
+    // public static async Task<(bool isSucsess, TrackingData trackedData)> Pull(string token)
+    // {
+    //     var payload = new
+    //     {
+    //         mode = "PULL",
+    //         token = token
+    //     };
+    //     string stringfiedPayload = JsonConvert.SerializeObject(payload);
+    //
+    //     (bool isSuccess, string response) = await APIRequestExecutor.PostJson(url: APIURL, payload: stringfiedPayload);
+    //     if (!isSuccess) return (false, null);
+    //
+    //     bool apiSuccess = false;
+    //     TrackingData trackedData = null;
+    //     try
+    //     {
+    //         ResponseToTrackedData responseJsonObj = JsonConvert.DeserializeObject<ResponseToTrackedData>(response);
+    //         apiSuccess = responseJsonObj.result == "success";
+    //         trackedData = responseJsonObj.payload;
+    //     }
+    //     catch (System.Exception) { return (false, null); }
+    //
+    //     return (apiSuccess, trackedData);
+    // }
 }

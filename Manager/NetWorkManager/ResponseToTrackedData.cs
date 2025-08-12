@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-
 public class ResponseToTrackedData
 {
     public string result;
-    public Dictionary<uint, StageData> trackedData;
+    public System.Collections.Generic.Dictionary<string, StageData> payload;
 }
 
 /*
