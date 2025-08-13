@@ -29,7 +29,19 @@ public class TrackInfoUIController : MonoBehaviour
 
         totalCount.text = track.totalGoalCounter.ToString();
         streakCount.text = track.streakGoalCounter.ToString();
-        totalTimer.text = totalTimerProperty.Seconds.ToString() + "." + track.totalTimer.Milliseconds.ToString() + "s";
-        currentTimer.text = TimerPerStageProperty.Seconds.ToString() + "." + TimerPerStageProperty.Milliseconds.ToString() + "s";
+        totalTimer.text = (int)totalTimerProperty.TotalHours + "h" + totalTimerProperty.Minutes.ToString("D2") + "m" + totalTimerProperty.Seconds.ToString("D2") + "s";
+        currentTimer.text = TimerPerStageProperty.TotalSeconds.ToString("F3") + "s";
+
+        //         StageData stage = new StageData();
+        //         stage.totalTimer = new TimeSpan(1, 2, 3);      // 1時間2分3秒
+        //         stage.timerPerStage = TimeSpan.FromMilliseconds(12345); // 12.345秒
+        //         stage.totalGoalCounter = 10;
+        //         stage.streakGoalCounter = 3;
+        //
+        //         string json = Newtonsoft.Json.JsonConvert.SerializeObject(stage);
+        //         Debug.Log(json);
+        //         /*
+        //         {"totalTimer":"01:02:03","timerPerStage":"00:00:12.3450000","totalGoalCounter":10,"streakGoalCounter":3}
+        //         */
     }
 }
