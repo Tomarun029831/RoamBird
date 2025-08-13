@@ -10,7 +10,7 @@ public static class SceneInitializer
         foreach (Entity entity in entities) { entity.Init(); }
         cameraHandler.Init();
 
-        if (StageProgressionTracker.state == StageProgressionTracker.State.InTracking) { StageProgressionTracker.StopTrack(false); }
+        if (StageProgressionTracker.state == StageProgressionTracker.State.InTracking) StageProgressionTracker.StopTrack(goalAchieved: false);
         StageProgressionTracker.Ready(StageProgressionTracker.CurrentStageBuildIndex);
         trackInfoUIController.UpdateTrackInfo(StageProgressionTracker.GetCurrentStageData());
     }
