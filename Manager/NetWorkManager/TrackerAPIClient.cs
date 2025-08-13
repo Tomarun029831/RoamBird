@@ -6,9 +6,13 @@ using Newtonsoft.Json;
 public static class TrackerAPIClient
 {
     private const string APIURL = ENV.TOMATECHAPI;
+    private static string token = null;
 
-    public static async Task<bool> Push(string token, Dictionary<uint, StageData> trackingData)
+    public static void SetToken(string token) => TrackerAPIClient.token = token;
+
+    public static async Task<bool> Push(Dictionary<uint, StageData> trackingData)
     {
+        if (string.IsNullOrWhiteSpace(token)) return false;
         var payload = new
         {
             mode = "PUSH",
@@ -28,12 +32,12 @@ public static class TrackerAPIClient
         }
         catch (System.Exception) { return false; }
 
-        return (apiSuccess);
+        return apiSuccess;
     }
 
-
-    public static async Task<(bool isSuccess, TrackingData trackedData)> Pull(string token)
+    public static async Task<(bool isSuccess, TrackingData trackedData)> Pull()
     {
+        if (string.IsNullOrWhiteSpace(token)) return (false, null);
         var payload = new
         {
             mode = "PULL",
