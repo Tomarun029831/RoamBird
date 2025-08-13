@@ -29,7 +29,7 @@ public static class StageProgressionTracker
 
     private static uint currentStageBuildIndex;
     public static uint CurrentStageBuildIndex => currentStageBuildIndex;
-    private static TrackingData stages = new();
+    private static TrackingData trackingDatas = new();
 
     public static void Ready(uint stageBuildIndex)
     {
@@ -67,10 +67,17 @@ public static class StageProgressionTracker
         }
         data.totalTimer += currentTimer.Elapsed;
 
+        PushTrackingDatasToDB();
         state = State.InStop;
     }
 
-    public static TrackingData ExtractStageDatas => stages;
+    private static async void PushTrackingDatasToDB()
+    {
+        bool result = false;
+        while (result == false) result = await TrackerAPIClient.Push(trackingDatas);
+    }
+
+    public static TrackingData ExtractStageDatas => trackingDatas;
 
     public static StageData GetCurrentStageData()
     {
@@ -78,20 +85,20 @@ public static class StageProgressionTracker
         return GetStageData(targetIndex);
     }
 
-    public static void SetTrackingData(TrackingData trackindData) => stages = trackindData;
+    public static void SetTrackingData(TrackingData trackindData) => trackingDatas = trackindData;
 
     private static void AddStage(uint stageBuildIndex)
     {
-        if (!stages.ContainsKey(stageBuildIndex)) stages[stageBuildIndex] = new StageData();
+        if (!trackingDatas.ContainsKey(stageBuildIndex)) trackingDatas[stageBuildIndex] = new StageData();
     }
 
     private static StageData GetStageData(uint stageBuildIndex)
     {
         StageData data;
-        if (!stages.TryGetValue(stageBuildIndex, out data))
+        if (!trackingDatas.TryGetValue(stageBuildIndex, out data))
         {
-            stages[stageBuildIndex] = new StageData();
-            data = stages[stageBuildIndex];
+            trackingDatas[stageBuildIndex] = new StageData();
+            data = trackingDatas[stageBuildIndex];
         }
         return data;
     }

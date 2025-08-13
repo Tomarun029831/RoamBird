@@ -44,7 +44,7 @@ public class UnifiedInputProcessor : MonoBehaviour
             if (!converter.ConsumeSpace()) { continue; }
             playable.Execute(Playable.Bind.Space);
 
-            if (StageProgressionTracker.state == StageProgressionTracker.State.InReady) { StageProgressionTracker.StartTrack(); }
+            if (StageProgressionTracker.state == StageProgressionTracker.State.InReady) StageProgressionTracker.StartTrack(); // HACK:
         }
     }
 }
