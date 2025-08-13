@@ -3,17 +3,11 @@ using UnityEngine;
 public class GlidingBat : Charactor
 {
     [SerializeField] private Animator animator;
-
     [SerializeField] private SpriteRenderer spriteRenderer;
-
     [SerializeField] private Rigidbody2D rg;
-
     [SerializeField] private Collider2D batCollider2D;
-
     [System.NonSerialized] public float internalTimer;
-
     public GlidingBatState state { get; private set; }
-
     private Vector3 initPosition;
     private bool initFlipY;
     private bool initFlipX;
@@ -49,18 +43,15 @@ public class GlidingBat : Charactor
 
     public void MoveX(float vectorX)
     {
-        if(vectorX <= 0){return;}
+        if (vectorX <= 0) { return; }
         rg.MovePosition(new Vector2(transform.position.x + (currentFlipY ? vectorX : -vectorX), transform.position.y));
     }
 
-    public void MoveY(float vectorY)
-    {
-        rg.MovePosition(new Vector2(transform.position.x, transform.position.y + vectorY));
-    }
+    public void MoveY(float vectorY) => rg.MovePosition(new Vector2(transform.position.x, transform.position.y + vectorY));
 
     public void Move(Vector2 vector2)
     {
-        if(vector2.x <= 0){return;}
+        if (vector2.x <= 0) { return; }
         rg.MovePosition(new Vector2(transform.position.x + (currentFlipY ? vector2.x : -vector2.x), transform.position.y + vector2.y));
     }
 
@@ -93,10 +84,7 @@ public class GlidingBat : Charactor
         SetState(BatGlide.getInstance());
     }
 
-    public void SetStateToFlyAway()
-    {
-        SetState(GlidingBatFlyAway.getInstance());
-    }
+    public void SetStateToFlyAway() => SetState(GlidingBatFlyAway.getInstance());
 
     private void SetState(GlidingBatState state)
     {
