@@ -10,6 +10,21 @@ public class NoticeUIController : MonoBehaviour
     [SerializeField] private GameObject loginProgressNoticeBar;
     [SerializeField] private Animator loginProgressNoticeBarAnimator;
     const string PopInAndOut = "PopInAndOut";
+    [SerializeField] private GameObject noticeUICanvasObj;
+    private static NoticeUIController singleton;
+
+    void Awake()
+    {
+        if (singleton != null)
+        {
+            Destroy(gameObject);
+            Destroy(noticeUICanvasObj);
+            return;
+        }
+        singleton = this;
+        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(noticeUICanvasObj);
+    }
 
     public async void PopLoginProgressNotice()
     {
