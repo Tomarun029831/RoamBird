@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 
 public class LoginFormUIController : MonoBehaviour
 {
+    [SerializeField] private NoticeUIController noticeUIController;
     [SerializeField] private GameObject loginForm;
     [SerializeField] private TMP_InputField plainUsername;
     [SerializeField] private TMP_InputField plainPassword;
-    public string PlainUsername => plainUsername.text;
-    public string PlainPassword => plainPassword.text;
+    private string PlainUsername => plainUsername.text;
+    private string PlainPassword => plainPassword.text;
 
     public void Active()
     {
@@ -17,42 +18,45 @@ public class LoginFormUIController : MonoBehaviour
         plainPassword.text = "";
     }
 
+    public void OnCloseButtonPressed() => loginForm.SetActive(false);
+
     public async void OnLoginButtonPressedWrapper()
     {
-        var (success, token, receivedTrackingData) = await OnLoginButtonPressed();
+        if (string.IsNullOrWhiteSpace(PlainUsername) || string.IsNullOrWhiteSpace(PlainPassword)) return;
+        noticeUIController.PopLoginProgressNotice();
+        var (success, receivedTrackingData) = await OnLoginButtonPressed(PlainUsername, PlainPassword);
+        if (!success) { noticeUIController.PopLoginFailedNotice(); return; }
+        noticeUIController.PopLoginSuccessNotice();
         StageProgressionTracker.SetTrackingData(receivedTrackingData);
     }
 
     public async void OnCreateAccountButtonPressedWrapper()
     {
-        var (success, token) = await OnCreateAccountButtonPressed();
+        if (string.IsNullOrWhiteSpace(PlainUsername) || string.IsNullOrWhiteSpace(PlainPassword)) return;
+        noticeUIController.PopLoginProgressNotice();
+        var success = await OnCreateAccountButtonPressed(PlainUsername, PlainPassword);
+        if (!success) { noticeUIController.PopLoginFailedNotice(); return; }
+        noticeUIController.PopLoginSuccessNotice();
     }
 
-
-    public async Task<(bool loginSucceeded, string token, TrackingData trackedData)> OnLoginButtonPressed()
+    public async Task<(bool loginSucceeded, TrackingData trackedData)> OnLoginButtonPressed(string plainUsername, string plainPassword)
     {
-        string plainUsername = this.PlainUsername;
-        string plainPassword = this.PlainPassword;
-        if (plainUsername == "" || plainPassword == "") { return (false, null, null); }
+        if (string.IsNullOrWhiteSpace(plainUsername) || string.IsNullOrWhiteSpace(plainPassword)) return (false, null);
+        bool loginSucceeded = await AccountAPIClient.DoLogin(plainUsername: plainUsername, plainPassword: plainPassword);
+        if (!loginSucceeded) return (false, null);
 
-        (bool loginSucceeded, string token) = await UserAPIClient.DoLogin(plainUsername: plainUsername, plainPassword: plainPassword);
-        if (!loginSucceeded) return (false, null, null);
+        (bool retrievalSucceeded, TrackingData trackedData) = await TrackerAPIClient.Pull();
+        if (!retrievalSucceeded) return (false, null);
 
-        (bool retrievalSucceeded, TrackingData trackedData) = await TrackerAPIClient.Pull(token);
-        if (!retrievalSucceeded) return (false, null, null);
-
-        return (retrievalSucceeded, token, trackedData);
+        return (retrievalSucceeded, trackedData);
     }
 
-    public async Task<(bool creationSuccess, string token)> OnCreateAccountButtonPressed()
+    public async Task<bool> OnCreateAccountButtonPressed(string plainUsername, string plainPassword)
     {
-        string plainUsername = this.PlainUsername;
-        string plainPassword = this.PlainPassword;
-        if (plainUsername == "" || plainPassword == "") return (false, null);
+        if (string.IsNullOrWhiteSpace(plainUsername) || string.IsNullOrWhiteSpace(plainPassword)) return false;
 
-        (bool creationSuccess, string token) = await UserAPIClient.CreateAcconut(plainUsername: plainUsername, plainPassword: plainPassword);
-        return (creationSuccess, token);
+        bool creationSuccess = await AccountAPIClient.CreateAcconut(plainUsername: plainUsername, plainPassword: plainPassword);
+        return creationSuccess;
     }
 
-    public void OnCloseButtonPressed() => loginForm.SetActive(false);
 }
