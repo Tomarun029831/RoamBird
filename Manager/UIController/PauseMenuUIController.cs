@@ -24,10 +24,7 @@ public class PauseMenuUIController : MonoBehaviour
 
     // ========== REACTION of Keyboard ==========
     public void ToggleActiveOfPauseMenuCanvas() => pauseMenuCanvasObj.SetActive(true);
-    public void ToggleActiveOfPausePanel()
-    {
-        pausePanel.SetActive(!pausePanel.activeSelf);
-    }
+    public void ToggleActiveOfPausePanel() => pausePanel.SetActive(!pausePanel.activeSelf);
 
     // ========== REACTION of GUI on display ==========
     public void OnHambugerButtonPressed() => pausePanel.SetActive(true);

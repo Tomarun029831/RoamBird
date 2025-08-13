@@ -3,12 +3,7 @@ using UnityEngine;
 public class PlayableBirdIdle : PlayableBirdState
 {
     private PlayableBirdIdle() { }
-
-    private static class SingletonHolder
-    {
-        public static readonly PlayableBirdState instance = new PlayableBirdIdle();
-    }
-
+    private static class SingletonHolder { public static readonly PlayableBirdState instance = new PlayableBirdIdle(); }
     public static PlayableBirdState getInstance() => SingletonHolder.instance;
 
     public void Jump(PlayableBird playableBird)
@@ -17,36 +12,21 @@ public class PlayableBirdIdle : PlayableBirdState
         Vector2 maxVelocity = playableBird.PlayableBirdData.JumpVelocity;
         int direction = playableBird.SpriteRenderer.flipX ? -1 : 1;
 
-        if (maxVelocity.x >= velocity.x)
-        {
-            playableBird.Rg.linearVelocityX = direction * maxVelocity.x;
-        }
-        if (maxVelocity.y >= velocity.y)
-        {
-            playableBird.Rg.linearVelocityY = maxVelocity.y;
-        }
+        if (maxVelocity.x >= velocity.x) playableBird.Rg.linearVelocityX = direction * maxVelocity.x;
+        if (maxVelocity.y >= velocity.y) playableBird.Rg.linearVelocityY = maxVelocity.y;
         playableBird.SetStateToFly();
     }
 
-    public void Animate(Animator animator)
-    {
-        animator.SetBool("isFly", false);
-    }
+    public void Animate(Animator animator) => animator.SetBool("isFly", false);
 
     public void OnCollisionEnter2D(Collision2D collision2D, PlayableBird playableBird)
     {
-        if (collision2D.gameObject.CompareTag("Needle"))
-        {
-            Dead(playableBird);
-        }
+        if (collision2D.gameObject.CompareTag("Needle")) Dead(playableBird);
     }
 
     public void OnTriggerEnter2D(Collider2D collider2D, PlayableBird playableBird)
     {
-        if (collider2D.CompareTag("Enemy"))
-        {
-            Dead(playableBird);
-        }
+        if (collider2D.CompareTag("Enemy")) Dead(playableBird);
         if (collider2D.CompareTag("Goal"))
         {
             StageProgressionTracker.StopTrack(true);

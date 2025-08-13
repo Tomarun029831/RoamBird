@@ -40,15 +40,9 @@ public class PlayableBird : Playable
 
     public override void FlipX() => spriteRenderer.flipX = !spriteRenderer.flipX;
 
-    public void SetStateToIdle()
-    {
-        SetState(PlayableBirdIdle.getInstance());
-    }
+    public void SetStateToIdle() => SetState(PlayableBirdIdle.getInstance());
 
-    public void SetStateToFly()
-    {
-        SetState(PlayableBirdFly.getInstance());
-    }
+    public void SetStateToFly() => SetState(PlayableBirdFly.getInstance());
 
     public void SetStateToDie()
     {

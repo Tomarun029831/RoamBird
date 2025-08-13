@@ -7,7 +7,6 @@ public static class TrackerAPIClient
 {
     private const string APIURL = ENV.TOMATECHAPI;
     private static string token = null;
-
     public static void SetToken(string token) => TrackerAPIClient.token = token;
 
     public static async Task<bool> Push(Dictionary<uint, StageData> trackingData)
@@ -50,19 +49,6 @@ public static class TrackerAPIClient
 
         try
         {
-            // UnityEngine.Debug.Log(response);
-            /*
-            {"result":"success",
-            "payload":{"1":{"totalTimer":"11:20:40",
-            "timerPerStage":"11:55:10",
-            "totalGoalCounter":40,
-            "streakGoalCounter":23},
-            "2":{"totalTimer":"17:05:20",
-            "timerPerStage":"17:45:10",
-            "totalGoalCounter":60,
-            "streakGoalCounter":19}}}
-            */
-
             ResponseToTrackedData responseJsonObj = JsonConvert.DeserializeObject<ResponseToTrackedData>(response);
             if (responseJsonObj == null || responseJsonObj.result != "success" || responseJsonObj.payload == null)
                 return (false, null);

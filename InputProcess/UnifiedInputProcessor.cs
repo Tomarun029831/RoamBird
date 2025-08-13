@@ -32,7 +32,7 @@ public class UnifiedInputProcessor : MonoBehaviour
         {
             converter.SyncInputState();
             // ========== Processing Unified Input ==========
-            if (!converter.ConsumeTab()) { continue; }
+            if (!converter.ConsumeTab()) continue;
             pauseMenuUIController.ToggleActiveOfPausePanel();
         }
     }
@@ -41,7 +41,7 @@ public class UnifiedInputProcessor : MonoBehaviour
     {
         foreach (IInputConverter converter in inputConverter)
         {
-            if (!converter.ConsumeSpace()) { continue; }
+            if (!converter.ConsumeSpace()) continue;
             playable.Execute(Playable.Bind.Space);
 
             if (StageProgressionTracker.state == StageProgressionTracker.State.InReady) StageProgressionTracker.StartTrack(); // HACK:

@@ -1,6 +1,3 @@
 using UnityEngine;
 
-public abstract class Entity : MonoBehaviour
-{
-    public abstract void Init();
-}
+public abstract class Entity : MonoBehaviour { public abstract void Init(); }

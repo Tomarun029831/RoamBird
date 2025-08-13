@@ -17,8 +17,7 @@ public static class APIRequestExecutor
 
             await req.SendWebRequest();
 
-            if (req.result != UnityWebRequest.Result.Success)
-                return (false, null);
+            if (req.result != UnityWebRequest.Result.Success) return (false, null);
 
             return (true, req.downloadHandler.text);
         }

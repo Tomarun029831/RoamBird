@@ -3,12 +3,7 @@ using UnityEngine;
 public class GlidingBatRest : GlidingBatState
 {
     private GlidingBatRest() { }
-
-    private static class SingletonHolder
-    {
-        public static readonly GlidingBatState instance = new GlidingBatRest();
-    }
-
+    private static class SingletonHolder { public static readonly GlidingBatState instance = new GlidingBatRest(); }
     public static GlidingBatState getInstance() => SingletonHolder.instance;
 
     public void FixedUpdate(GlidingBat glidingBat)
@@ -16,15 +11,11 @@ public class GlidingBatRest : GlidingBatState
         Vector2 rayDirection = glidingBat.GetRestDirection() ? Vector2.left : Vector2.right;
         RaycastHit2D raycastHit2D = Physics2D.Raycast(glidingBat.transform.position, rayDirection, 9f, LayerMask.GetMask("VisiblePlayer"));
         Debug.DrawRay(glidingBat.transform.position, rayDirection, Color.red, 1f);
-        if (raycastHit2D.collider == null) { return; }
-
+        if (raycastHit2D.collider == null) return;
         glidingBat.state.TakeNextAction(glidingBat);
     }
 
-    public void TakeNextAction(GlidingBat glidingBat)
-    {
-        glidingBat.SetStateToGlide();
-    }
+    public void TakeNextAction(GlidingBat glidingBat) => glidingBat.SetStateToGlide();
 
     public void Animate(Animator animator)
     {

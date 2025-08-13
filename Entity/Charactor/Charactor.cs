@@ -1,4 +1,1 @@
-public abstract class Charactor : Entity
-{
-
-}
+public abstract class Charactor : Entity{}
