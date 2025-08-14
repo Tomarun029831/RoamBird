@@ -15,6 +15,7 @@ public class NoticeUIController : MonoBehaviour
 
     void Awake() // HACK: `Missing Reference` in inspector, but it corrently works
     {
+
         if (singleton != null)
         {
             foreach (Transform child in singleton.transform)

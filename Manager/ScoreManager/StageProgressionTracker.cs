@@ -30,6 +30,7 @@ public static class StageProgressionTracker
     private static uint currentStageBuildIndex;
     public static uint CurrentStageBuildIndex => currentStageBuildIndex;
     private static TrackingData trackingDatas = new();
+    public static TrackingData debug_getTrackingDatas() => trackingDatas;
 
     public static void Ready(uint stageBuildIndex)
     {
@@ -67,14 +68,8 @@ public static class StageProgressionTracker
         }
         data.totalTimer += currentTimer.Elapsed;
 
-        PushTrackingDatasToDB();
+        System.Threading.Tasks.Task<bool> task = TrackerAPIClient.Push(trackingDatas);
         state = State.InStop;
-    }
-
-    private static async void PushTrackingDatasToDB()
-    {
-        bool result = false;
-        while (result == false) result = await TrackerAPIClient.Push(trackingDatas);
     }
 
     public static TrackingData ExtractStageDatas => trackingDatas;
