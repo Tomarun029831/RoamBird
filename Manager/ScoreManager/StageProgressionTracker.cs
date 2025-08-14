@@ -33,6 +33,7 @@ public static class StageProgressionTracker
 
     public static void Ready(uint stageBuildIndex)
     {
+        if (stageBuildIndex <= 0) return;
         currentStageBuildIndex = stageBuildIndex;
         AddStage(stageBuildIndex);
         state = State.InReady;
@@ -72,7 +73,7 @@ public static class StageProgressionTracker
 
     private static TrackingData ExtractStageDatas()
     {
-        TrackingData formatedTrackingDatas = trackingDatas;
+        TrackingData formatedTrackingDatas = new TrackingData(trackingDatas);
         foreach (var (key, val) in formatedTrackingDatas)
             if (formatedTrackingDatas[key].timerPerStage == TimeSpan.MaxValue)
                 formatedTrackingDatas[key].timerPerStage = TimeSpan.Zero;
