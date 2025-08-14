@@ -82,7 +82,19 @@ public static class StageProgressionTracker
     public static StageData GetCurrentStageData()
     {
         uint targetIndex = currentStageBuildIndex > 0 ? currentStageBuildIndex : 1;
-        return GetStageData(targetIndex);
+        StageData stageData = GetStageData(targetIndex);
+
+        bool isTracking = state == State.InTracking;
+
+        StageData displayData = new StageData
+        {
+            totalTimer = isTracking ? stageData.totalTimer + currentTimer.Elapsed : stageData.totalTimer,
+            timerPerStage = isTracking ? currentTimer.Elapsed : stageData.timerPerStage,
+            totalGoalCounter = stageData.totalGoalCounter,
+            streakGoalCounter = stageData.streakGoalCounter
+        };
+
+        return displayData;
     }
 
     public static void SetTrackingData(TrackingData trackindData) => trackingDatas = trackindData;
