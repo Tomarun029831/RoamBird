@@ -8,7 +8,7 @@ public static class TrackerAPIClient
     private static string token = null;
     public static void SetToken(string token) => TrackerAPIClient.token = token;
 
-    public static async Task<bool> Push(TrackingData trackingDatas) // FIXME:
+    public static async Task<bool> Push(TrackingData trackingDatas)
     {
         if (string.IsNullOrWhiteSpace(token)) return false;
         string mode = "PUSH";
