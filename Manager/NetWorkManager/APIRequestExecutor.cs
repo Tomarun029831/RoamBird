@@ -12,8 +12,7 @@ public static class APIRequestExecutor
         {
             req.uploadHandler = new UploadHandlerRaw(jsonBytes);
             req.downloadHandler = new DownloadHandlerBuffer();
-            req.SetRequestHeader("Content-Type", "application/json");
-
+            req.SetRequestHeader("Content-Type", "text/plain");
             await req.SendWebRequest();
 
             if (req.result != UnityWebRequest.Result.Success) return (false, null);
