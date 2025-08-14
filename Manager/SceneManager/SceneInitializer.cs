@@ -7,10 +7,10 @@ public static class SceneInitializer
     {
         Entity[] entities = SceneScanner.ScanAllEntities();
         CameraHandler cameraHandler = SceneScanner.ScanCameraHandler();
-        foreach (Entity entity in entities) { entity.Init(); }
+        foreach (Entity entity in entities) entity.Init();
         cameraHandler.Init();
 
-        if (StageProgressionTracker.state == StageProgressionTracker.State.InTracking) { StageProgressionTracker.StopTrack(false); }
+        if (StageProgressionTracker.state == StageProgressionTracker.State.InTracking) StageProgressionTracker.StopTrack(goalAchieved: false);
         StageProgressionTracker.Ready(StageProgressionTracker.CurrentStageBuildIndex);
         trackInfoUIController.UpdateTrackInfo(StageProgressionTracker.GetCurrentStageData());
     }

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Newtonsoft.Json;
@@ -7,17 +6,19 @@ public static class TrackerAPIClient
 {
     private const string APIURL = ENV.TOMATECHAPI;
     private static string token = null;
-
     public static void SetToken(string token) => TrackerAPIClient.token = token;
 
-    public static async Task<bool> Push(Dictionary<uint, StageData> trackingData)
+    public static async Task<bool> Push(TrackingData trackingDatas)
     {
         if (string.IsNullOrWhiteSpace(token)) return false;
+        string mode = "PUSH";
+        string stringfiedTrackingDatas = Newtonsoft.Json.JsonConvert.SerializeObject(trackingDatas);
         var payload = new
         {
-            mode = "PUSH",
+            mode = mode,
             token = token,
-            trackingDatas = trackingData
+            trackingDatas = trackingDatas,
+            checksum = ENV.ComputeHash(mode + token + stringfiedTrackingDatas)
         };
         string stringfiedPayload = JsonConvert.SerializeObject(payload);
 
@@ -38,10 +39,12 @@ public static class TrackerAPIClient
     public static async Task<(bool isSuccess, TrackingData trackedData)> Pull()
     {
         if (string.IsNullOrWhiteSpace(token)) return (false, null);
+        string mode = "PULL";
         var payload = new
         {
             mode = "PULL",
-            token = token
+            token = token,
+            checksum = ENV.ComputeHash(mode + token)
         };
         string stringfiedPayload = JsonConvert.SerializeObject(payload);
 

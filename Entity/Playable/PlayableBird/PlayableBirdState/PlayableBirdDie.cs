@@ -3,14 +3,8 @@ using UnityEngine;
 public class PlayableBirdDie : PlayableBirdState
 {
     private PlayableBirdDie() { }
-
-    private static class SingletonHolder
-    {
-        public static readonly PlayableBirdState instance = new PlayableBirdDie();
-    }
-
+    private static class SingletonHolder { public static readonly PlayableBirdState instance = new PlayableBirdDie(); }
     public static PlayableBirdState getInstance() => SingletonHolder.instance;
-
     public void Jump(PlayableBird playableBird) { return; }
 
     public void Animate(Animator animator)

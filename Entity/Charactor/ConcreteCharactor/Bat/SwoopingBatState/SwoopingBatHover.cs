@@ -3,12 +3,7 @@ using UnityEngine;
 public class SwoopingBatHover : SwoopingBatState
 {
     private SwoopingBatHover() { }
-
-    private static class SingletonHolder
-    {
-        public static readonly SwoopingBatState instance = new SwoopingBatHover();
-    }
-
+    private static class SingletonHolder { public static readonly SwoopingBatState instance = new SwoopingBatHover(); }
     public static SwoopingBatState getInstance() => SingletonHolder.instance;
 
     public void FixedUpdate(SwoopingBat swoopingBat)
@@ -20,20 +15,14 @@ public class SwoopingBatHover : SwoopingBatState
         RaycastHit2D raycastHit2D = Physics2D.Raycast(raycastOrigin, rayDirection, 0.7f, LayerMask.GetMask("Ground"));
         Debug.DrawRay(swoopingBat.transform.position, rayDirection, Color.red, 0);
 
-        if (raycastHit2D.collider != null) { swoopingBat.Turn(); }
-
+        if (raycastHit2D.collider != null) swoopingBat.Turn();
         swoopingBat.MoveX(0.2f);
-
-        if (swoopingBat.internalTimer < 3) { return; }
-
+        if (swoopingBat.internalTimer < 3) return;
         swoopingBat.internalTimer = 0;
         TakeNextAction(swoopingBat);
     }
 
-    public void TakeNextAction(SwoopingBat swoopingBat)
-    {
-        swoopingBat.SetStateToFlyAway();
-    }
+    public void TakeNextAction(SwoopingBat swoopingBat) => swoopingBat.SetStateToFlyAway();
 
     public void Animate(Animator animator)
     {

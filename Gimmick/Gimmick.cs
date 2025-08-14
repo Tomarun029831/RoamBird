@@ -1,4 +1,1 @@
-public interface Gimmick
-{
-
-}
+public interface Gimmick { }

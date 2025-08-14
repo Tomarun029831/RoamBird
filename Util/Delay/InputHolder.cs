@@ -10,20 +10,15 @@ namespace Assets.Scripts.Util.Delay
     {
         private readonly Dictionary<T, bool> keyInputs;
         public IReadOnlyDictionary<T, bool> KeyInputs => keyInputs;
-
         public InputHolder() => keyInputs = new Dictionary<T, bool>();
-
         public InputHolder(int capacity) => keyInputs = new Dictionary<T, bool>(capacity);
-
         public InputHolder(T predefinedKey) => keyInputs = new Dictionary<T, bool> { { predefinedKey, false } };
 
         public InputHolder(IEnumerable<T> predefinedKeys)
         {
             keyInputs = new Dictionary<T, bool>();
             foreach (var key in predefinedKeys)
-            {
                 keyInputs[key] = false;
-            }
         }
 
         public void HoldInput(T key) => keyInputs[key] = true;

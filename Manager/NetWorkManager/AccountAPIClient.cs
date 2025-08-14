@@ -13,7 +13,8 @@ public static class AccountAPIClient
         {
             mode = mode,
             username = plainUsername,
-            password = hashedPassword
+            password = hashedPassword,
+            checksum = ENV.ComputeHash(mode + plainUsername + hashedPassword)
         };
         string stringfiedObj = JsonConvert.SerializeObject(jsonObj);
 
@@ -40,7 +41,8 @@ public static class AccountAPIClient
         {
             mode = mode,
             username = plainUsername,
-            password = hashedPassword
+            password = hashedPassword,
+            checksum = ENV.ComputeHash(mode + plainUsername + hashedPassword)
         };
         string stringfiedObj = JsonConvert.SerializeObject(jsonObj);
 

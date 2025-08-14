@@ -8,7 +8,6 @@ public class TrackInfoUIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI streakCount;
     [SerializeField] private TextMeshProUGUI totalTimer;
     [SerializeField] private TextMeshProUGUI currentTimer;
-
     private static TrackInfoUIController singleton;
 
     void Awake()
@@ -29,7 +28,7 @@ public class TrackInfoUIController : MonoBehaviour
 
         totalCount.text = track.totalGoalCounter.ToString();
         streakCount.text = track.streakGoalCounter.ToString();
-        totalTimer.text = totalTimerProperty.Seconds.ToString() + "." + track.totalTimer.Milliseconds.ToString() + "s";
-        currentTimer.text = TimerPerStageProperty.Seconds.ToString() + "." + TimerPerStageProperty.Milliseconds.ToString() + "s";
+        totalTimer.text = (int)totalTimerProperty.TotalHours + "h" + totalTimerProperty.Minutes.ToString("D2") + "m" + totalTimerProperty.Seconds.ToString("D2") + "s";
+        currentTimer.text = TimerPerStageProperty.TotalSeconds.ToString("F3") + "s";
     }
 }

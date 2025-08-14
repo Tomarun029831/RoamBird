@@ -3,12 +3,7 @@ using UnityEngine;
 public class BatGlide : GlidingBatState
 {
     private BatGlide() { }
-
-    private static class SingletonHolder
-    {
-        public static readonly GlidingBatState instance = new BatGlide();
-    }
-
+    private static class SingletonHolder { public static readonly GlidingBatState instance = new BatGlide(); }
     public static GlidingBatState getInstance() => SingletonHolder.instance;
 
     public void FixedUpdate(GlidingBat glidingBat)
@@ -22,18 +17,13 @@ public class BatGlide : GlidingBatState
 
         glidingBat.Move(new Vector2(0.2f * Mathf.Abs(Mathf.Sin(glidingBat.internalTimer % 1)), -0.05f));
 
-        if (raycastHit2D.collider != null) { glidingBat.Turn(); }
-
-        if (glidingBat.internalTimer < 3) { return; }
-
+        if (raycastHit2D.collider != null) glidingBat.Turn();
+        if (glidingBat.internalTimer < 3) return;
         glidingBat.internalTimer = 0;
         TakeNextAction(glidingBat);
     }
 
-    public void TakeNextAction(GlidingBat glidingBat)
-    {
-        glidingBat.SetStateToFlyAway();
-    }
+    public void TakeNextAction(GlidingBat glidingBat) => glidingBat.SetStateToFlyAway();
 
     public void Animate(Animator animator)
     {

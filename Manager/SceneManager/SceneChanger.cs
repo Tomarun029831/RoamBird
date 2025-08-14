@@ -9,22 +9,16 @@ public static class SceneChanger
     {
         int targetIndex = SceneManager.GetActiveScene().buildIndex + 1;
         if (0 < targetIndex && targetIndex < SceneManager.sceneCountInBuildSettings)
-        {
             LoadSceneAt((uint)targetIndex);
-        }
         else if (targetIndex >= SceneManager.sceneCountInBuildSettings)
-        {
             LoadSceneAt(1);
-        }
     }
 
     public static void ChangeBackwardScene()
     {
         int targetIndex = SceneManager.GetActiveScene().buildIndex - 1;
         if (0 < targetIndex && targetIndex < SceneManager.sceneCountInBuildSettings)
-        {
             LoadSceneAt((uint)targetIndex);
-        }
     }
 
     public static void LoadSceneAt(uint index)

@@ -4,7 +4,7 @@ using UnityEngine;
 public class NoticeUIController : MonoBehaviour
 {
     [SerializeField] private GameObject loginFailedNoticeBar;
-    [SerializeField] private Animator loginFailedNotionBarAnimator;
+    [SerializeField] private Animator loginFailedNoticenBarAnimator;
     [SerializeField] private GameObject loginSuccessNoticeBar;
     [SerializeField] private Animator loginSuccessNoticeBarAnimator;
     [SerializeField] private GameObject loginProgressNoticeBar;
@@ -13,40 +13,38 @@ public class NoticeUIController : MonoBehaviour
     [SerializeField] private GameObject noticeUICanvasObj;
     private static NoticeUIController singleton;
 
-    void Awake()
+    void Awake() // HACK: `Missing Reference` in inspector, but it corrently works
     {
+
         if (singleton != null)
         {
+            foreach (Transform child in singleton.transform)
+                Destroy(child.gameObject);
+            while (transform.childCount > 0)
+            {
+                Transform childTransform = transform.GetChild(0);
+                childTransform.SetParent(singleton.transform, false);
+            }
             Destroy(gameObject);
-            Destroy(noticeUICanvasObj);
             return;
         }
+
         singleton = this;
         DontDestroyOnLoad(gameObject);
-        DontDestroyOnLoad(noticeUICanvasObj);
     }
 
-    public async void PopLoginProgressNotice()
+    private async void PopNotice(GameObject bar, Animator animator)
     {
-        loginProgressNoticeBar.SetActive(true);
-        loginProgressNoticeBarAnimator.SetTrigger(PopInAndOut);
+        if (bar == null || animator == null) return;
+
+        bar.SetActive(true);
+        animator.SetTrigger(PopInAndOut);
         await Task.Delay(4000);
-        loginProgressNoticeBar.SetActive(false);
+
+        if (bar != null) bar.SetActive(false);
     }
 
-    public async void PopLoginFailedNotice()
-    {
-        loginFailedNoticeBar.SetActive(true);
-        loginFailedNotionBarAnimator.SetTrigger(PopInAndOut);
-        await Task.Delay(4000);
-        loginFailedNoticeBar.SetActive(false);
-    }
-
-    public async void PopLoginSuccessNotice()
-    {
-        loginSuccessNoticeBar.SetActive(true);
-        loginSuccessNoticeBarAnimator.SetTrigger(PopInAndOut);
-        await Task.Delay(4000);
-        loginSuccessNoticeBar.SetActive(false);
-    }
+    public void PopLoginProgressNotice() => PopNotice(loginProgressNoticeBar, loginProgressNoticeBarAnimator);
+    public void PopLoginFailedNotice() => PopNotice(loginFailedNoticeBar, loginFailedNoticenBarAnimator);
+    public void PopLoginSuccessNotice() => PopNotice(loginSuccessNoticeBar, loginSuccessNoticeBarAnimator);
 }

@@ -3,17 +3,11 @@ using UnityEngine;
 public class SwoopingBat : Charactor
 {
     [SerializeField] private Animator animator;
-
     [SerializeField] private SpriteRenderer spriteRenderer;
-
     [SerializeField] private Rigidbody2D rg;
-
     [SerializeField] private Collider2D batCollider2D;
-
     [System.NonSerialized] public float internalTimer;
-
     public SwoopingBatState state { get; private set; }
-
     private Vector3 initPosition;
 
     void Awake()
@@ -28,24 +22,17 @@ public class SwoopingBat : Charactor
 
     public void FlipToLeft() => spriteRenderer.flipX = false;
 
-    public bool GetRestDirection(){
-        return spriteRenderer.flipX;
-    }
+    public bool GetRestDirection() => spriteRenderer.flipX;
 
-    public void Turn(){
-        spriteRenderer.flipX = !spriteRenderer.flipX;
-    }
+    public void Turn() => spriteRenderer.flipX = !spriteRenderer.flipX;
 
     public void MoveX(float vectorX)
     {
-        if(vectorX <= 0){return;}
+        if (vectorX <= 0) { return; }
         rg.MovePosition(new Vector2(transform.position.x + (spriteRenderer.flipX ? vectorX : -vectorX), transform.position.y));
     }
 
-    public void MoveY(float vectorY)
-    {
-        rg.MovePosition(new Vector2(transform.position.x, transform.position.y + vectorY));
-    }
+    public void MoveY(float vectorY) => rg.MovePosition(new Vector2(transform.position.x, transform.position.y + vectorY));
 
     public void Hide()
     {

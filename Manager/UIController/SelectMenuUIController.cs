@@ -22,4 +22,10 @@ public class SelectMenuUIController : MonoBehaviour
         pauseMenuUIController.ToggleActiveOfPauseMenuCanvas();
         SceneChanger.LoadSceneAt(2);
     }
+
+    public void OnStage3Pressed()
+    {
+        pauseMenuUIController.ToggleActiveOfPauseMenuCanvas();
+        SceneChanger.LoadSceneAt(3);
+    }
 }

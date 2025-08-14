@@ -1,11 +1,14 @@
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class PauseMenuUIController : MonoBehaviour
 {
-    [SerializeField] GameObject pauseMenuCanvasObj;
-    [SerializeField] Canvas pauseMenuCanvas;
-    [SerializeField] GameObject pausePanel;
+    [SerializeField] private GameObject pauseMenuCanvasObj;
+    [SerializeField] private Canvas pauseMenuCanvas;
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private TrackInfoUIController trackInfoUIController;
     private static PauseMenuUIController singleton;
+    private static bool IsPauseMenuOpen = false;
 
     void Awake()
     {
@@ -20,22 +23,49 @@ public class PauseMenuUIController : MonoBehaviour
         DontDestroyOnLoad(pauseMenuCanvasObj);
     }
 
-    // ========== Auto-Counter ==========
+    private async Task UpdatePauseMenuInfoAsync()
+    {
+        while (IsPauseMenuOpen)
+        {
+            trackInfoUIController.UpdateTrackInfo(
+                StageProgressionTracker.GetCurrentStageData()
+            );
+
+            await Task.Yield();
+        }
+    }
 
     // ========== REACTION of Keyboard ==========
-    public void ToggleActiveOfPauseMenuCanvas() => pauseMenuCanvasObj.SetActive(true);
+    public void ToggleActiveOfPauseMenuCanvas() => pauseMenuCanvasObj.SetActive(true); // Init
+
     public void ToggleActiveOfPausePanel()
     {
-        pausePanel.SetActive(!pausePanel.activeSelf);
+        IsPauseMenuOpen = !IsPauseMenuOpen;
+        pausePanel.SetActive(IsPauseMenuOpen);
+
+        if (IsPauseMenuOpen)
+            _ = UpdatePauseMenuInfoAsync();
     }
 
     // ========== REACTION of GUI on display ==========
-    public void OnHambugerButtonPressed() => pausePanel.SetActive(true);
+    public void OnHambugerButtonPressed()
+    {
+        IsPauseMenuOpen = true;
+        pausePanel.SetActive(true);
+        _ = UpdatePauseMenuInfoAsync();
+    }
+
+    public void OnCloseButtonPressed()
+    {
+        IsPauseMenuOpen = false;
+        pausePanel.SetActive(false);
+    }
+
     public void OnMainMenuButtonPressed()
     {
+        IsPauseMenuOpen = false;
         pausePanel.SetActive(false);
         pauseMenuCanvasObj.SetActive(false);
         SceneChanger.LoadMainMenu();
     }
-    public void OnCloseButtonPressed() => pausePanel.SetActive(false);
 }

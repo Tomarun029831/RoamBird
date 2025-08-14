@@ -29,10 +29,11 @@ public static class StageProgressionTracker
 
     private static uint currentStageBuildIndex;
     public static uint CurrentStageBuildIndex => currentStageBuildIndex;
-    private static TrackingData stages = new();
+    private static TrackingData trackingDatas = new();
 
     public static void Ready(uint stageBuildIndex)
     {
+        if (stageBuildIndex <= 0) return;
         currentStageBuildIndex = stageBuildIndex;
         AddStage(stageBuildIndex);
         state = State.InReady;
@@ -66,32 +67,51 @@ public static class StageProgressionTracker
             data.streakGoalCounter = 0;
         }
         data.totalTimer += currentTimer.Elapsed;
-
+        System.Threading.Tasks.Task<bool> task = TrackerAPIClient.Push(ExtractStageDatas());
         state = State.InStop;
     }
 
-    public static TrackingData ExtractStageDatas => stages;
+    private static TrackingData ExtractStageDatas()
+    {
+        TrackingData formatedTrackingDatas = new TrackingData(trackingDatas);
+        foreach (var (key, val) in formatedTrackingDatas)
+            if (formatedTrackingDatas[key].timerPerStage == TimeSpan.MaxValue)
+                formatedTrackingDatas[key].timerPerStage = TimeSpan.Zero;
+        return formatedTrackingDatas;
+    }
 
     public static StageData GetCurrentStageData()
     {
         uint targetIndex = currentStageBuildIndex > 0 ? currentStageBuildIndex : 1;
-        return GetStageData(targetIndex);
+        StageData stageData = GetStageData(targetIndex);
+
+        bool isTracking = state == State.InTracking;
+
+        StageData displayData = new StageData
+        {
+            totalTimer = isTracking ? stageData.totalTimer + currentTimer.Elapsed : stageData.totalTimer,
+            timerPerStage = isTracking ? currentTimer.Elapsed : stageData.timerPerStage,
+            totalGoalCounter = stageData.totalGoalCounter,
+            streakGoalCounter = stageData.streakGoalCounter
+        };
+
+        return displayData;
     }
 
-    public static void SetTrackingData(TrackingData trackindData) => stages = trackindData;
+    public static void SetTrackingData(TrackingData trackindData) => trackingDatas = trackindData;
 
     private static void AddStage(uint stageBuildIndex)
     {
-        if (!stages.ContainsKey(stageBuildIndex)) stages[stageBuildIndex] = new StageData();
+        if (!trackingDatas.ContainsKey(stageBuildIndex)) trackingDatas[stageBuildIndex] = new StageData();
     }
 
     private static StageData GetStageData(uint stageBuildIndex)
     {
         StageData data;
-        if (!stages.TryGetValue(stageBuildIndex, out data))
+        if (!trackingDatas.TryGetValue(stageBuildIndex, out data))
         {
-            stages[stageBuildIndex] = new StageData();
-            data = stages[stageBuildIndex];
+            trackingDatas[stageBuildIndex] = new StageData();
+            data = trackingDatas[stageBuildIndex];
         }
         return data;
     }
