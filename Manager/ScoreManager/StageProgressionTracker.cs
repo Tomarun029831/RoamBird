@@ -66,12 +66,18 @@ public static class StageProgressionTracker
             data.streakGoalCounter = 0;
         }
         data.totalTimer += currentTimer.Elapsed;
-
-        System.Threading.Tasks.Task<bool> task = TrackerAPIClient.Push(trackingDatas);
+        System.Threading.Tasks.Task<bool> task = TrackerAPIClient.Push(ExtractStageDatas());
         state = State.InStop;
     }
 
-    public static TrackingData ExtractStageDatas => trackingDatas;
+    private static TrackingData ExtractStageDatas()
+    {
+        TrackingData formatedTrackingDatas = trackingDatas;
+        foreach (var (key, val) in formatedTrackingDatas)
+            if (formatedTrackingDatas[key].timerPerStage == TimeSpan.MaxValue)
+                formatedTrackingDatas[key].timerPerStage = TimeSpan.Zero;
+        return formatedTrackingDatas;
+    }
 
     public static StageData GetCurrentStageData()
     {
