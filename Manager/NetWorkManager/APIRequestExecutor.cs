@@ -8,7 +8,6 @@ public static class APIRequestExecutor
     public static async Task<(bool isSuccess, string receivedPayloadText)> PostJson(string url, string payload)
     {
         byte[] jsonBytes = Encoding.UTF8.GetBytes(payload);
-
         using (UnityWebRequest req = new UnityWebRequest(url, "POST"))
         {
             req.uploadHandler = new UploadHandlerRaw(jsonBytes);
