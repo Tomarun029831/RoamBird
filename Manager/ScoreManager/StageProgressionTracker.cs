@@ -30,7 +30,6 @@ public static class StageProgressionTracker
     private static uint currentStageBuildIndex;
     public static uint CurrentStageBuildIndex => currentStageBuildIndex;
     private static TrackingData trackingDatas = new();
-    public static TrackingData debug_getTrackingDatas() => trackingDatas;
 
     public static void Ready(uint stageBuildIndex)
     {
