@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public static class SceneInitializer
 {
@@ -7,7 +8,7 @@ public static class SceneInitializer
     {
         Entity[] entities = SceneScanner.ScanAllEntities();
         CameraHandler cameraHandler = SceneScanner.ScanCameraHandler();
-        foreach (Entity entity in entities) entity.Init();
+        Array.ForEach(entities, e => e.Init());
         cameraHandler.Init();
 
         if (StageProgressionTracker.state == StageProgressionTracker.State.InTracking) StageProgressionTracker.StopTrack(goalAchieved: false);
