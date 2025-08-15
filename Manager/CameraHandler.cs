@@ -18,13 +18,15 @@ public class CameraHandler : MonoBehaviour
 
     private void TrackTargetX(float targetX)
     {
-        if (startCoordinate.x > targetX || targetX > endCoordinate.x) return;
+        bool isOutOfRangeOnX = targetX < startCoordinate.x || endCoordinate.x < targetX;
+        if (isOutOfRangeOnX) return;
         transform.position = new(targetX, transform.position.y, -10);
     }
 
     private void TrackTargetY(float targetY)
     {
-        if (startCoordinate.y < targetY || targetY < endCoordinate.y) return;
+        bool isOutOfRangeOnY = startCoordinate.y < targetY || targetY < endCoordinate.y;
+        if (isOutOfRangeOnY) return;
         transform.position = new(transform.position.x, targetY, -10);
     }
 
