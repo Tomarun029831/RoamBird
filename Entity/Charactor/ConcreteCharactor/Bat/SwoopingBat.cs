@@ -28,7 +28,7 @@ public class SwoopingBat : Charactor
 
     public void MoveX(float vectorX)
     {
-        if (vectorX <= 0) { return; }
+        if (vectorX <= 0) return;
         rg.MovePosition(new Vector2(transform.position.x + (spriteRenderer.flipX ? vectorX : -vectorX), transform.position.y));
     }
 

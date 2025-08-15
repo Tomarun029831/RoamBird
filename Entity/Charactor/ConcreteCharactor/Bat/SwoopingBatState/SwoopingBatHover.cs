@@ -15,7 +15,8 @@ public class SwoopingBatHover : SwoopingBatState
         RaycastHit2D raycastHit2D = Physics2D.Raycast(raycastOrigin, rayDirection, 0.7f, LayerMask.GetMask("Ground"));
         Debug.DrawRay(swoopingBat.transform.position, rayDirection, Color.red, 0);
 
-        if (raycastHit2D.collider != null) swoopingBat.Turn();
+        bool isOnWall = raycastHit2D.collider != null;
+        if (isOnWall) swoopingBat.Turn();
         swoopingBat.MoveX(0.2f);
         if (swoopingBat.internalTimer < 3) return;
         swoopingBat.internalTimer = 0;
