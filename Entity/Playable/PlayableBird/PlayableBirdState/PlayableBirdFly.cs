@@ -8,12 +8,13 @@ public class PlayableBirdFly : PlayableBirdState
 
     public void Jump(PlayableBird playableBird)
     {
-        Vector2 velocity = new(Mathf.Abs(playableBird.Rg.linearVelocityX), playableBird.Rg.linearVelocityY);
+        Vector2 currentVelocity = new(Mathf.Abs(playableBird.Rg.linearVelocityX), playableBird.Rg.linearVelocityY);
         Vector2 maxVelocity = playableBird.PlayableBirdData.JumpVelocity;
-        int direction = playableBird.SpriteRenderer.flipX ? -1 : 1;
-
-        if (maxVelocity.x >= velocity.x) playableBird.Rg.linearVelocityX = direction * maxVelocity.x;
-        if (maxVelocity.y >= velocity.y) playableBird.Rg.linearVelocityY = maxVelocity.y;
+        int nextDirection = playableBird.SpriteRenderer.flipX ? -1 : 1;
+        bool IsNotMaxVelocityOnX = maxVelocity.x >= currentVelocity.x;
+        if (IsNotMaxVelocityOnX) playableBird.Rg.linearVelocityX = nextDirection * maxVelocity.x;
+        bool IsNotMaxVelocityOnY = maxVelocity.y >= currentVelocity.y;
+        if (IsNotMaxVelocityOnY) playableBird.Rg.linearVelocityY = maxVelocity.y;
     }
 
     public void Animate(Animator animator) => animator.SetBool("isFly", true);
@@ -21,12 +22,13 @@ public class PlayableBirdFly : PlayableBirdState
     public void OnCollisionEnter2D(Collision2D collision2D, PlayableBird playableBird)
     {
         if (collision2D.gameObject.CompareTag("Needle")) Dead(playableBird);
-
         if (collision2D.gameObject.CompareTag("Ground"))
         {
-            Vector3 origin = playableBird.transform.position + 0.3f * Vector3.down;
-            RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, Vector2.down, 0.4f, LayerMask.GetMask("Ground"));
-            if (raycastHit2D.collider == null) return;
+            Vector3 footOrigin = playableBird.transform.position + 0.3f * Vector3.down;
+            RaycastHit2D downwardRaycast = Physics2D.Raycast(footOrigin, Vector2.down, 0.4f, LayerMask.GetMask("Ground"));
+            bool isOnGround = downwardRaycast.collider == null;
+            if (isOnGround) return;
+
             playableBird.SetStateToIdle();
         }
     }
