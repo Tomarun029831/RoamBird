@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using System.Linq;
 using Newtonsoft.Json;
+using ZLinq;
 
 public static class TrackerAPIClient
 {
@@ -57,7 +57,7 @@ public static class TrackerAPIClient
             if (responseJsonObj == null || responseJsonObj.result != "success" || responseJsonObj.payload == null)
                 return (false, null);
 
-            var dictUintKey = responseJsonObj.payload.ToDictionary(
+            var dictUintKey = responseJsonObj.payload.AsValueEnumerable().ToDictionary(
                 kvp => uint.Parse(kvp.Key),
                 kvp => kvp.Value
             );

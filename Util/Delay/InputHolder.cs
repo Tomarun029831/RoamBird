@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
+using ZLinq;
 
 namespace Assets.Scripts.Util.Delay
 {
@@ -15,7 +15,7 @@ namespace Assets.Scripts.Util.Delay
         public InputHolder(int capacity) => keyInputs = new Dictionary<T, bool>(capacity);
         public InputHolder(T predefinedKey) => keyInputs = new Dictionary<T, bool> { { predefinedKey, false } };
 
-        public InputHolder(IEnumerable<T> predefinedKeys) => keyInputs = predefinedKeys.ToDictionary(k => k, _ => false);
+        public InputHolder(IEnumerable<T> predefinedKeys) => keyInputs = predefinedKeys.AsValueEnumerable().ToDictionary(k => k, _ => false);
 
         public void HoldInput(T key) => keyInputs[key] = true;
 
