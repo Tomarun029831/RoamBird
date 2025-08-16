@@ -9,7 +9,8 @@ public class BatSwoop : SwoopingBatState
     public void FixedUpdate(SwoopingBat swoopingBat)
     {
         swoopingBat.internalTimer += Time.deltaTime;
-        if (swoopingBat.internalTimer < 1.0f) return;
+        bool isNotHoverTime = swoopingBat.internalTimer < 1.0f;
+        if (isNotHoverTime) return;
         swoopingBat.internalTimer = 0;
         TakeNextAction(swoopingBat);
     }

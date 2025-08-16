@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.Scripts.Util.Delay
 {
@@ -14,12 +15,7 @@ namespace Assets.Scripts.Util.Delay
         public InputHolder(int capacity) => keyInputs = new Dictionary<T, bool>(capacity);
         public InputHolder(T predefinedKey) => keyInputs = new Dictionary<T, bool> { { predefinedKey, false } };
 
-        public InputHolder(IEnumerable<T> predefinedKeys)
-        {
-            keyInputs = new Dictionary<T, bool>();
-            foreach (var key in predefinedKeys)
-                keyInputs[key] = false;
-        }
+        public InputHolder(IEnumerable<T> predefinedKeys) => keyInputs = predefinedKeys.ToDictionary(k => k, _ => false);
 
         public void HoldInput(T key) => keyInputs[key] = true;
 

@@ -17,8 +17,10 @@ public class BatGlide : GlidingBatState
 
         glidingBat.Move(new Vector2(0.2f * Mathf.Abs(Mathf.Sin(glidingBat.internalTimer % 1)), -0.05f));
 
-        if (raycastHit2D.collider != null) glidingBat.Turn();
-        if (glidingBat.internalTimer < 3) return;
+        bool isOnWall = raycastHit2D.collider != null;
+        if (isOnWall) glidingBat.Turn();
+        bool isNotFlyAwayTime = glidingBat.internalTimer < 3;
+        if (isNotFlyAwayTime) return;
         glidingBat.internalTimer = 0;
         TakeNextAction(glidingBat);
     }

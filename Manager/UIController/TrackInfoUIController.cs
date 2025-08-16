@@ -24,7 +24,7 @@ public class TrackInfoUIController : MonoBehaviour
     public void UpdateTrackInfo(StageData track)
     {
         TimeSpan totalTimerProperty = track.totalTimer;
-        TimeSpan TimerPerStageProperty = track.timerPerStage == TimeSpan.MaxValue ? TimeSpan.Zero : track.timerPerStage;
+        TimeSpan TimerPerStageProperty = track.timerPerStage;
 
         totalCount.text = track.totalGoalCounter.ToString();
         streakCount.text = track.streakGoalCounter.ToString();

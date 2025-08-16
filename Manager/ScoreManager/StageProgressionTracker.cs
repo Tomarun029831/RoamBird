@@ -11,7 +11,7 @@ public class TrackingData : System.Collections.Generic.Dictionary<uint, StageDat
 public class StageData
 {
     public TimeSpan totalTimer = TimeSpan.Zero;
-    public TimeSpan timerPerStage = TimeSpan.MaxValue;
+    public TimeSpan timerPerStage = TimeSpan.Zero;
     public uint totalGoalCounter = 0;
     public uint streakGoalCounter = 0;
 }
@@ -41,7 +41,6 @@ public static class StageProgressionTracker
 
     public static void StartTrack()
     {
-        StageData data = GetStageData(currentStageBuildIndex);
         if (state != State.InReady) return;
         currentTimer.Restart();
         state = State.InTracking;
@@ -57,7 +56,8 @@ public static class StageProgressionTracker
         {
             // streak
             data.streakGoalCounter++;
-            data.timerPerStage = data.timerPerStage > currentTimer.Elapsed ? currentTimer.Elapsed : data.timerPerStage;
+            if (data.timerPerStage == TimeSpan.Zero || data.timerPerStage > currentTimer.Elapsed)
+                data.timerPerStage = currentTimer.Elapsed;
             // total
             data.totalGoalCounter++;
         }
@@ -67,18 +67,18 @@ public static class StageProgressionTracker
             data.streakGoalCounter = 0;
         }
         data.totalTimer += currentTimer.Elapsed;
-        System.Threading.Tasks.Task<bool> task = TrackerAPIClient.Push(ExtractStageDatas());
+        System.Threading.Tasks.Task<bool> task = TrackerAPIClient.Push(new TrackingData(trackingDatas));
         state = State.InStop;
     }
 
-    private static TrackingData ExtractStageDatas()
-    {
-        TrackingData formatedTrackingDatas = new TrackingData(trackingDatas);
-        foreach (var (key, val) in formatedTrackingDatas)
-            if (formatedTrackingDatas[key].timerPerStage == TimeSpan.MaxValue)
-                formatedTrackingDatas[key].timerPerStage = TimeSpan.Zero;
-        return formatedTrackingDatas;
-    }
+    // private static TrackingData ExtractStageDatas()
+    // {
+    //     TrackingData formatedTrackingDatas = new TrackingData(trackingDatas);
+    //     foreach (var (key, val) in formatedTrackingDatas)
+    //         if (formatedTrackingDatas[key].timerPerStage == TimeSpan.MaxValue)
+    //             formatedTrackingDatas[key].timerPerStage = TimeSpan.Zero;
+    //     return formatedTrackingDatas;
+    // }
 
     public static StageData GetCurrentStageData()
     {

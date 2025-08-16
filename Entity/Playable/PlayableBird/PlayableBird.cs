@@ -26,17 +26,7 @@ public class PlayableBird : Playable
 
     void OnTriggerEnter2D(Collider2D collider2D) => state.OnTriggerEnter2D(collider2D, this);
 
-    public override void Execute(Bind bind)
-    {
-        switch (bind)
-        {
-            case (Bind.Space):
-                state.Jump(this);
-                break;
-            default:
-                break;
-        }
-    }
+    public override void Execute(Bind bind) { if (bind == Bind.Space) state.Jump(this); }
 
     public override void FlipX() => spriteRenderer.flipX = !spriteRenderer.flipX;
 
@@ -44,7 +34,7 @@ public class PlayableBird : Playable
 
     public void SetStateToFly() => SetState(PlayableBirdFly.getInstance());
 
-    public void SetStateToDie()
+    public void SetStateToDie() // HACK:
     {
         SetState(PlayableBirdDie.getInstance());
         Rg.linearVelocity = Vector2.zero;

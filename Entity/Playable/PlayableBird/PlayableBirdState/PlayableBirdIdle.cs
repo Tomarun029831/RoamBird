@@ -8,12 +8,14 @@ public class PlayableBirdIdle : PlayableBirdState
 
     public void Jump(PlayableBird playableBird)
     {
-        Vector2 velocity = new(Mathf.Abs(playableBird.Rg.linearVelocityX), playableBird.Rg.linearVelocityY);
+        Vector2 currentVelocity = new(Mathf.Abs(playableBird.Rg.linearVelocityX), playableBird.Rg.linearVelocityY);
         Vector2 maxVelocity = playableBird.PlayableBirdData.JumpVelocity;
-        int direction = playableBird.SpriteRenderer.flipX ? -1 : 1;
+        int nextDirection = playableBird.SpriteRenderer.flipX ? -1 : 1;
+        bool IsNotMaxVelocityOnX = maxVelocity.x >= currentVelocity.x;
+        if (IsNotMaxVelocityOnX) playableBird.Rg.linearVelocityX = nextDirection * maxVelocity.x;
+        bool IsNotMaxVelocityOnY = maxVelocity.y >= currentVelocity.y;
+        if (IsNotMaxVelocityOnY) playableBird.Rg.linearVelocityY = maxVelocity.y;
 
-        if (maxVelocity.x >= velocity.x) playableBird.Rg.linearVelocityX = direction * maxVelocity.x;
-        if (maxVelocity.y >= velocity.y) playableBird.Rg.linearVelocityY = maxVelocity.y;
         playableBird.SetStateToFly();
     }
 
