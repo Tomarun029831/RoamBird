@@ -12,7 +12,8 @@ public class SwoopingBatFlyAway : SwoopingBatState
     {
         swoopingBat.internalTimer += Time.deltaTime;
         swoopingBat.MoveY(0.2f);
-        if (swoopingBat.internalTimer < 1.6) return;
+        bool isNotDisappearTime = swoopingBat.internalTimer < 1.6;
+        if (isNotDisappearTime) return;
         TakeNextAction(swoopingBat);
     }
 

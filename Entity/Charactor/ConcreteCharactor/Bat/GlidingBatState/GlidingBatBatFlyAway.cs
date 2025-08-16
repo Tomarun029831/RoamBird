@@ -10,7 +10,8 @@ public class GlidingBatFlyAway : GlidingBatState
     {
         glidingBat.internalTimer += Time.deltaTime;
         glidingBat.MoveY(0.2f);
-        if (glidingBat.internalTimer < 1.6) return;
+        bool isNotDisappearTime = glidingBat.internalTimer < 1.6;
+        if (isNotDisappearTime) return;
         TakeNextAction(glidingBat);
     }
 

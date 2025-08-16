@@ -11,7 +11,8 @@ public class GlidingBatRest : GlidingBatState
         Vector2 rayDirection = glidingBat.GetRestDirection() ? Vector2.left : Vector2.right;
         RaycastHit2D raycastHit2D = Physics2D.Raycast(glidingBat.transform.position, rayDirection, 9f, LayerMask.GetMask("VisiblePlayer"));
         Debug.DrawRay(glidingBat.transform.position, rayDirection, Color.red, 1f);
-        if (raycastHit2D.collider == null) return;
+        bool isNotOnWall = raycastHit2D.collider == null;
+        if (isNotOnWall) return;
         glidingBat.state.TakeNextAction(glidingBat);
     }
 

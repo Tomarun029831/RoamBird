@@ -43,7 +43,8 @@ public class GlidingBat : Charactor
 
     public void MoveX(float vectorX)
     {
-        if (vectorX <= 0) return;
+        bool isZeroOrNegative = vectorX <= 0;
+        if (isZeroOrNegative) return;
         rg.MovePosition(new Vector2(transform.position.x + (currentFlipY ? vectorX : -vectorX), transform.position.y));
     }
 
@@ -51,7 +52,8 @@ public class GlidingBat : Charactor
 
     public void Move(Vector2 vector2)
     {
-        if (vector2.x <= 0) return;
+        bool isZeroOrNegative = vector2.x <= 0;
+        if (isZeroOrNegative) return;
         rg.MovePosition(new Vector2(transform.position.x + (currentFlipY ? vector2.x : -vector2.x), transform.position.y + vector2.y));
     }
 

@@ -10,7 +10,8 @@ public class SwoopingBatRest : SwoopingBatState
     {
         RaycastHit2D raycastHit2D = Physics2D.Raycast(swoopingBat.transform.position, Vector2.down, 6f, LayerMask.GetMask("VisiblePlayer"));
         Debug.DrawRay(swoopingBat.transform.position, Vector2.down, Color.red, 1f);
-        if (raycastHit2D.collider == null) return;
+        bool isNotDetectPlayer = raycastHit2D.collider == null;
+        if (isNotDetectPlayer) return;
         swoopingBat.state.TakeNextAction(swoopingBat);
     }
 
