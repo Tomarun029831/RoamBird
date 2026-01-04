@@ -1,17 +1,27 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using System;
 
 public class PlayableBird : Playable
 {
-    [SerializeField] private PlayableBirdScriptableObject playableBirdData;
+    [SerializeField]
+    private PlayableBirdScriptableObject playableBirdData;
     public PlayableBirdScriptableObject PlayableBirdData => playableBirdData;
-    [SerializeField] private Rigidbody2D rg;
+
+    [SerializeField]
+    private Rigidbody2D rg;
     public Rigidbody2D Rg => rg;
-    [SerializeField] private SpriteRenderer spriteRenderer;
+
+    [SerializeField]
+    private SpriteRenderer spriteRenderer;
     public SpriteRenderer SpriteRenderer => spriteRenderer;
-    [SerializeField] private Animator animator;
+
+    [SerializeField]
+    private Animator animator;
     public Animator Animator => animator;
     public PlayableBirdState state { private set; get; }
-    private Vector2 initPosition, initVelocity;
+    private Vector2 initPosition,
+        initVelocity;
     private bool initFlipX;
 
     void Awake()
@@ -26,7 +36,11 @@ public class PlayableBird : Playable
 
     void OnTriggerEnter2D(Collider2D collider2D) => state.OnTriggerEnter2D(collider2D, this);
 
-    public override void Execute(Bind bind) { if (bind == Bind.Space) state.Jump(this); }
+    public override void Execute(Bind bind)
+    {
+        if (bind == Bind.Space)
+            state.Jump(this);
+    }
 
     public override void FlipX() => spriteRenderer.flipX = !spriteRenderer.flipX;
 
@@ -34,12 +48,14 @@ public class PlayableBird : Playable
 
     public void SetStateToFly() => SetState(PlayableBirdFly.getInstance());
 
-    public void SetStateToDie() // HACK:
+    public async UniTaskVoid SetStateToDie()
     {
         SetState(PlayableBirdDie.getInstance());
         Rg.linearVelocity = Vector2.zero;
-        Invoke(nameof(CallSceneInitilaze), 2f);
         StageProgressionTracker.StopTrack(false);
+
+        await UniTask.Delay(TimeSpan.FromSeconds(2), ignoreTimeScale: false);
+        SceneInitializer.InitializeScene();
     }
 
     private void SetState(PlayableBirdState state)
@@ -47,8 +63,6 @@ public class PlayableBird : Playable
         this.state = state;
         this.state.Animate(Animator);
     }
-
-    private void CallSceneInitilaze() => SceneInitializer.InitializeScene();
 
     public override void Init()
     {

@@ -39,6 +39,6 @@ public class PlayableBirdIdle : PlayableBirdState
     private void Dead(PlayableBird playableBird)
     {
         playableBird.Rg.linearVelocity = Vector2.zero;
-        playableBird.SetStateToDie();
+        _ = playableBird.SetStateToDie();
     }
 }
